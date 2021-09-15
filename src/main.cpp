@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+#include "graphics/shaderProgram.h"
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 
@@ -57,7 +59,7 @@ int main(){
 
     unsigned int vao;
 
-    const char* vertexShaderString("#version 330 core\n"
+/*     const char* vertexShaderString("#version 330 core\n"
                                     "layout (location = 0) in vec2 aPos;\n"
                                     "void main(){\n"
                                     "gl_Position = vec4(aPos.x, aPos.y, 0.0, 1.0);\n"
@@ -71,7 +73,7 @@ int main(){
                                      "}");    
     unsigned int fragmentShader;
 
-    unsigned int shaderProgram;
+    unsigned int shaderProgram; */
 
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
@@ -87,7 +89,7 @@ int main(){
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    vertexShader = glCreateShader(GL_VERTEX_SHADER);
+/*     vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderString, NULL);
     glCompileShader(vertexShader);
 
@@ -98,13 +100,22 @@ int main(){
     shaderProgram = glCreateProgram();
 
     glAttachShader(shaderProgram, vertexShader);
+    glDeleteShader(vertexShader);
     glAttachShader(shaderProgram, fragmentShader);
+    glDeleteShader(fragmentShader);
     glLinkProgram(shaderProgram);
 
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
+    
+    
 
-    glUseProgram(shaderProgram);
+    glUseProgram(shaderProgram); */
+
+    shaderProgram testShaderProgram;
+    testShaderProgram.addShaderFromFile("shaders/simpleTestVertexShader.sdv");
+    testShaderProgram.addShaderFromFile("shaders/simpleTestFragmentShader.sdf");
+    testShaderProgram.link();
+
+    testShaderProgram.bind();
 
     // render loop
     // -----------
@@ -126,7 +137,7 @@ int main(){
         glfwPollEvents();
     }
 
-    glDeleteProgram(shaderProgram);
+    //glDeleteProgram(shaderProgram);
     glDeleteVertexArrays(1, &vao);
     glDeleteBuffers(1, &vbo);
     glDeleteBuffers(1, &ebo);
