@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "graphics/shaderProgram.h"
+#include "graphics/imageLoader/stb_image.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -42,11 +43,11 @@ int main(){
         return -1;
     }
 
-    float vertices[8] = {
-         0.0f, 0.5f,
-        -0.5f, 0.0f,
-         0.5f, 0.0f,
-         0.5f, 0.5f
+    float vertices[16] = {
+         0.0f, 0.5f, 0.48f, 0.05f,
+        -0.5f, 0.0f, 0.12f, 0.46f,
+         0.5f, 0.0f, 0.73f, 0.46f,
+         0.5f, 0.5f, 0.73f, 0.05f
     };
     unsigned int indices[6] = {
         0, 1, 2,
@@ -59,21 +60,7 @@ int main(){
 
     unsigned int vao;
 
-/*     const char* vertexShaderString("#version 330 core\n"
-                                    "layout (location = 0) in vec2 aPos;\n"
-                                    "void main(){\n"
-                                    "gl_Position = vec4(aPos.x, aPos.y, 0.0, 1.0);\n"
-                                    "}");
-    unsigned int vertexShader;
-
-    const char* fragmentShaderString("#version 330 core\n"
-                                     "out vec4 FragColor;\n"
-                                     "void main(){\n"
-                                     "FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-                                     "}");    
-    unsigned int fragmentShader;
-
-    unsigned int shaderProgram; */
+    unsigned int textureObject;
 
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
@@ -86,29 +73,30 @@ int main(){
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), (void*)(2*sizeof(float)));
+    glEnableVertexAttribArray(1);
 
-/*     vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderString, NULL);
-    glCompileShader(vertexShader);
-
-    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderString, NULL);
-    glCompileShader(fragmentShader);
-
-    shaderProgram = glCreateProgram();
-
-    glAttachShader(shaderProgram, vertexShader);
-    glDeleteShader(vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glDeleteShader(fragmentShader);
-    glLinkProgram(shaderProgram);
-
-    
+    unsigned char* imageData;
+    int width, height, channels;
     
 
-    glUseProgram(shaderProgram); */
+    imageData = stbi_load("assets/images/weez.jpg", &width, &height, &channels, 0);
+
+    glGenTextures(1, &textureObject);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, textureObject);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, imageData);
+
+    glGenerateMipmap(GL_TEXTURE_2D);
 
     shaderProgram testShaderProgram;
     testShaderProgram.addShaderFromFile("shaders/simpleTestVertexShader.sdv");
@@ -116,6 +104,8 @@ int main(){
     testShaderProgram.link();
 
     testShaderProgram.bind();
+
+    testShaderProgram.setUniform("textureSlot", 0);
 
     // render loop
     // -----------
@@ -141,6 +131,7 @@ int main(){
     glDeleteVertexArrays(1, &vao);
     glDeleteBuffers(1, &vbo);
     glDeleteBuffers(1, &ebo);
+    stbi_image_free(imageData);
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
     glfwTerminate();

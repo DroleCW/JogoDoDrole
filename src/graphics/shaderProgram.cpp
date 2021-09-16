@@ -56,6 +56,7 @@ void shaderProgram::addShaderFromFile(const char* path){
         glShaderSource(newShaderID, 1, &shaderSource, NULL);
         glCompileShader(newShaderID);
 
+        //compile status check
         int success;
         char log[512];
         glGetShaderiv(newShaderID, GL_COMPILE_STATUS, &success);
@@ -92,6 +93,8 @@ void shaderProgram::link(){
 void shaderProgram::bind(){
     glUseProgram(id);
 }
+
+
 
 void shaderProgram::setUniform(const char* name, int x){
     glUniform1i(glGetUniformLocation(id, name), x);
