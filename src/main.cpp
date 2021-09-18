@@ -125,7 +125,6 @@ int main(){
             translationY = 0.0f;
         }
 
-
         testShaderProgram.setUniform("translation", translationX, translationY);
 
         // render
