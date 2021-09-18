@@ -107,12 +107,26 @@ int main(){
 
     testShaderProgram.setUniform("textureSlot", 0);
 
+    float translationX = 0.0f;
+    float translationY = 0.0f;
+
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window)){
         // input
         // -----
         processInput(window);
+
+        translationX += 0.01f;
+        translationY += 0.01f;
+
+        if(translationX > 1.2f){
+            translationX = 0.0f;
+            translationY = 0.0f;
+        }
+
+
+        testShaderProgram.setUniform("translation", translationX, translationY);
 
         // render
         // ------
