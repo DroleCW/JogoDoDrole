@@ -1,6 +1,4 @@
 #pragma once
-
-#include <glad/glad.h>
 #include <fstream>
 #include <stdio.h>
 

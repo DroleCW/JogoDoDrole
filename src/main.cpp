@@ -4,7 +4,7 @@
 #include <iostream>
 
 #include "graphics/shaderProgram.h"
-#include "graphics/imageLoader/stb_image.h"
+#include "graphics/texture.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -44,10 +44,10 @@ int main(){
     }
 
     float vertices[16] = {
-         0.0f, 0.5f, 0.48f, 0.05f,
-        -0.5f, 0.0f, 0.12f, 0.46f,
-         0.5f, 0.0f, 0.73f, 0.46f,
-         0.5f, 0.5f, 0.73f, 0.05f
+         0.0f, 0.5f, 0.0f, 0.0f,
+        -0.5f, 0.0f, 0.0f, 250.0f,
+         0.5f, 0.0f, 200.0f, 250.0f,
+         0.5f, 0.5f, 200.0f, 0.0f
     };
     unsigned int indices[6] = {
         0, 1, 2,
@@ -59,8 +59,6 @@ int main(){
     unsigned int ebo;
 
     unsigned int vao;
-
-    unsigned int textureObject;
 
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
@@ -78,25 +76,11 @@ int main(){
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), (void*)(2*sizeof(float)));
     glEnableVertexAttribArray(1);
 
-    unsigned char* imageData;
-    int width, height, channels;
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     
 
-    imageData = stbi_load("assets/images/weez.jpg", &width, &height, &channels, 0);
 
-    glGenTextures(1, &textureObject);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, textureObject);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, imageData);
-
-    glGenerateMipmap(GL_TEXTURE_2D);
 
     shaderProgram testShaderProgram;
     testShaderProgram.addShaderFromFile("shaders/simpleTestVertexShader.sdv");
@@ -109,6 +93,10 @@ int main(){
 
     float translationX = 0.0f;
     float translationY = 0.0f;
+
+    Texture wheezerText(0, "./assets/images/weez.jpg");
+    wheezerText.bind(0);
+
 
     // render loop
     // -----------
@@ -144,7 +132,6 @@ int main(){
     glDeleteVertexArrays(1, &vao);
     glDeleteBuffers(1, &vbo);
     glDeleteBuffers(1, &ebo);
-    stbi_image_free(imageData);
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
     glfwTerminate();
