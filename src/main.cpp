@@ -4,7 +4,7 @@
 #include <iostream>
 
 #include "graphics/shaderProgram.h"
-#include "graphics/texture.h"
+#include "graphics/textureManager.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -81,8 +81,9 @@ int main(){
 
 
 
+    TextureManager testTextureManager;
 
-    shaderProgram testShaderProgram;
+    ShaderProgram testShaderProgram;
     testShaderProgram.addShaderFromFile("shaders/simpleTestVertexShader.sdv");
     testShaderProgram.addShaderFromFile("shaders/simpleTestFragmentShader.sdf");
     testShaderProgram.link();
@@ -94,8 +95,8 @@ int main(){
     float translationX = 0.0f;
     float translationY = 0.0f;
 
-    Texture wheezerText(0, "./assets/images/weez.jpg");
-    wheezerText.bind(0);
+    testTextureManager.loadTexture("./assets/images/weez.jpg");
+    testTextureManager.bindTexture("./assets/images/weez.jpg", 0);
 
 
     // render loop

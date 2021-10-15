@@ -2,36 +2,19 @@
 #include "graphics/imageLoader/stb_image.h"
 #include <glad/glad.h>
 
-Texture::Texture():id(-1){
-    width = -1;
-    height = -1;
-    channels = -1;
+Texture::Texture(const char* path){
+    width = 0;
+    height = 0;
+    channels = 0;
     
     textureObject = 0;
 
     data = nullptr;
-}
 
-Texture::Texture(int id):id(id){
-    width = 0;
-    height = 0;
-    channels = 0;
-
-    glGenTextures(1, &textureObject);
-
-    data = nullptr;
-}
-
-Texture::Texture(int id, const char* path):id(id){
-    width = 0;
-    height = 0;
-    channels = 0;
-
-    glGenTextures(1, &textureObject);
-
-    data = nullptr;
-
-    loadFromFile(path);
+    if(path){
+        glGenTextures(1, &textureObject);
+        loadFromFile(path);
+    }
 }
 
 Texture::~Texture(){
@@ -53,14 +36,11 @@ bool Texture::loadFromFile(const char* path){
     if(data)
         return true;
     else{
-        printf("ERROR: could not load texture. ID: %d\n", id);
+        printf("ERROR: could not load texture.");
         return false;
     }
 }
 
-int Texture::getId() const{
-    return id;
-}
 
 int Texture::getWidth() const{
     return width;

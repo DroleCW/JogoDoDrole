@@ -1,18 +1,18 @@
 #include "graphics/shaderProgram.h"
 #include <glad/glad.h>
 
-shaderProgram::shaderProgram(){
+ShaderProgram::ShaderProgram(){
     id = glCreateProgram();
 }
-shaderProgram::~shaderProgram(){
+ShaderProgram::~ShaderProgram(){
     glDeleteProgram(id);
 }
 
-const unsigned int shaderProgram::getID() const{
+const unsigned int ShaderProgram::getID() const{
     return id;
 }
 
-void shaderProgram::addShaderFromFile(const char* path){
+void ShaderProgram::addShaderFromFile(const char* path){
     const char* it = path;
 
     for(it = path; *it != '.' && *it != '\0'; it++);
@@ -77,7 +77,7 @@ void shaderProgram::addShaderFromFile(const char* path){
     
 }
 
-void shaderProgram::link(){
+void ShaderProgram::link(){
     int success;
     char log[512];
 
@@ -90,32 +90,32 @@ void shaderProgram::link(){
     
 }
 
-void shaderProgram::bind(){
+void ShaderProgram::bind(){
     glUseProgram(id);
 }
 
 
 
-void shaderProgram::setUniform(const char* name, int x){
+void ShaderProgram::setUniform(const char* name, int x){
     glUniform1i(glGetUniformLocation(id, name), x);
 }
 
-void shaderProgram::setUniform(const char* name, int x, int y){
+void ShaderProgram::setUniform(const char* name, int x, int y){
     glUniform2i(glGetUniformLocation(id, name), x, y);
 }
 
-void shaderProgram::setUniform(const char* name, int x, int y, int z){
+void ShaderProgram::setUniform(const char* name, int x, int y, int z){
     glUniform3i(glGetUniformLocation(id, name), x, y, z);
 }
 
-void shaderProgram::setUniform(const char* name, float x){
+void ShaderProgram::setUniform(const char* name, float x){
     glUniform1f(glGetUniformLocation(id, name), x);
 }
 
-void shaderProgram::setUniform(const char* name, float x, float y){
+void ShaderProgram::setUniform(const char* name, float x, float y){
     glUniform2f(glGetUniformLocation(id, name), x, y);
 }
 
-void shaderProgram::setUniform(const char* name, float x, float y, float z){
+void ShaderProgram::setUniform(const char* name, float x, float y, float z){
     glUniform3f(glGetUniformLocation(id, name), x, y, z);
 }

@@ -2,14 +2,14 @@
 #include <fstream>
 #include <stdio.h>
 
-class shaderProgram{
+class ShaderProgram{
 
     private:
         unsigned int id;
     
     public:
-        shaderProgram();
-        ~shaderProgram();
+        ShaderProgram();
+        ~ShaderProgram();
 
         const unsigned int getID() const;
 

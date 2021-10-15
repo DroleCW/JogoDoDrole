@@ -2,7 +2,6 @@
 
 class Texture{
     private:
-        const int id;
 
         unsigned int textureObject;
 
@@ -14,14 +13,11 @@ class Texture{
         unsigned char* data;
 
     public:
-        Texture();
-        Texture(int id);
-        Texture(int id, const char* path);
+        Texture(const char* path = nullptr);
         ~Texture();
 
         bool loadFromFile(const char* path);
 
-        int getId() const;
         int getWidth() const;
         int getHeight() const;
         int getChannels() const;
