@@ -7,3 +7,4 @@ uniform sampler2DRect textureSlot;
 void main(){
 FragColor = texture(textureSlot, textCoord);
 }
+

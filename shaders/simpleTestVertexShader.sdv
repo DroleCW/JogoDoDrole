@@ -10,3 +10,4 @@ void main(){
 gl_Position = vec4(aPos.x + translation.x, aPos.y + translation.y, 0.0, 1.0);
 textCoord = aTextCoord;
 }
+
