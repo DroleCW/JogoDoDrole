@@ -13,19 +13,18 @@ const unsigned int ShaderProgram::getID() const{
 }
 
 void ShaderProgram::addShaderFromFile(const char* path){
-    const char* it = path;
+	std::string pathStr = std::string(path);
 
-    for(it = path; *it != '.' && *it != '\0'; it++);
+	int indexOfFileType = pathStr.find(".sd");
+    if(indexOfFileType != -1){ //filetype check
 
-    if(*it == '.' && *(it+1) == 's' && *(it+2) == 'd'){ //filetype check
-        
         int newShaderID;
-        
-        switch (*(it+3)){   //creates shader object based on the last character of the filetype
+
+        switch (path[indexOfFileType+3]){   //creates shader object based on the last character of the filetype
         case 'v': //.sdv for vertex shader
             newShaderID = glCreateShader(GL_VERTEX_SHADER);
             break;
-        
+
         case 'f': //.sdf for fragment shader
             newShaderID = glCreateShader(GL_FRAGMENT_SHADER);
             break;
@@ -74,7 +73,6 @@ void ShaderProgram::addShaderFromFile(const char* path){
     else{
         printf("ERROR. Wrong shader file type.\n");
     }
-    
 }
 
 void ShaderProgram::link(){
