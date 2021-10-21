@@ -1,25 +1,32 @@
 #include "graphics/textureManager.h"
 
 TextureManager::TextureManager(){
+    for(int i = 1; i < NUMBER_OF_TEXTURES; i++)
+        loadedTextures[i] = nullptr;
+
+    loadTexturePaths(TEXTURE_INDEX_FILE);
 
 }
 
 TextureManager::~TextureManager(){
     
 
-    for(auto textureIt = loadedTextures.begin(); textureIt != loadedTextures.end(); textureIt++)
-        delete textureIt->second;
+    for(int i = 1; i < NUMBER_OF_TEXTURES; i++)
+        if(loadedTextures[i])
+            delete loadedTextures[i];
+
+    for(int i = 1; i < NUMBER_OF_TEXTURES; i++)
+        if(texturePaths[i])
+            delete[] texturePaths[i];
 
 }
 
-bool TextureManager::loadTexture(const char* path){
+bool TextureManager::loadTexture(TextureLocation textureIndex){
 
-    auto textureIt = loadedTextures.find(path);
-
-    if(textureIt == loadedTextures.end()){
+    if(loadedTextures[textureIndex] == nullptr){
         Texture* newTexture = new Texture();
-        if(newTexture->loadFromFile(path)){
-            loadedTextures.insert({path, newTexture});
+        if(newTexture->loadFromFile(texturePaths[textureIndex])){
+            loadedTextures[textureIndex] = newTexture;
             return true;
         }
         else{
@@ -31,29 +38,48 @@ bool TextureManager::loadTexture(const char* path){
     return true;
 }
 
-void TextureManager::unloadTexture(const char* path){
+void TextureManager::unloadTexture(TextureLocation textureIndex){
 
-    auto textureIt = loadedTextures.find(path);
-
-    if(textureIt != loadedTextures.end()){
-        delete textureIt->second;
-        loadedTextures.erase(textureIt);
+    if(loadedTextures[textureIndex]){
+        delete loadedTextures[textureIndex];
+        loadedTextures[textureIndex] = nullptr;
     }
 }
 
-void TextureManager::bindTexture(const char* path, int slot){
-    auto textureIt = loadedTextures.find(path);
-
-    if(textureIt != loadedTextures.end())
-       textureIt->second->bind(slot); 
-    
+void TextureManager::bindTexture(TextureLocation textureIndex, int slot){
+    loadedTextures[textureIndex]->bind(slot); 
 }
 
-Texture* TextureManager::getTexture(const char* path){
-    auto textureIt = loadedTextures.find(path);
+Texture* TextureManager::getTexture(TextureLocation textureIndex){
+    return loadedTextures[textureIndex];
+}
 
-    if(textureIt != loadedTextures.end())
-        return textureIt->second;
-    else
-        return nullptr;
+bool TextureManager::loadTexturePaths(const char* indicesFilePath){
+
+    std::ifstream textureIndicesFile;
+
+    textureIndicesFile.open(indicesFilePath);
+
+    for(int i = 1; i < NUMBER_OF_TEXTURES; i++)
+        texturePaths[i] = new char[MAX_TEXTURE_PATH_SIZE];
+
+
+    if(textureIndicesFile.is_open()){
+        int index = 1;
+        while (textureIndicesFile.peek() != EOF && index < NUMBER_OF_TEXTURES){
+            textureIndicesFile.ignore(5, ' ');
+            textureIndicesFile.getline(texturePaths[index], 40);
+            index++;
+        }
+        if(index == NUMBER_OF_TEXTURES)
+            return true;
+        else{
+            printf("ERROR: Failure to load all texture files\n");
+            return false; 
+        }
+    }
+    else{
+        printf("ERROR: Could not load texture paths.\n");
+        return false;
+    }
 }

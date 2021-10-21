@@ -95,8 +95,8 @@ int main(){
     float translationX = 0.0f;
     float translationY = 0.0f;
 
-    testTextureManager.loadTexture("./assets/images/weez.jpg");
-    testTextureManager.bindTexture("./assets/images/weez.jpg", 0);
+    testTextureManager.loadTexture(TEST_TEXTURE2_LOCATION);
+    testTextureManager.bindTexture(TEST_TEXTURE2_LOCATION, 0);
 
 
     // render loop
