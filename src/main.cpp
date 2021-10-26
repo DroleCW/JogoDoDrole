@@ -5,6 +5,7 @@
 
 #include "graphics/shaderProgram.h"
 #include "graphics/textureManager.h"
+#include "math/vec2f.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -77,7 +78,16 @@ int main(){
     glEnableVertexAttribArray(1);
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    
+
+
+    vec2f first(2, 3);
+    vec2f second(4, 5);
+    vec2f third = first+second;
+    printf("%f, %f, %f\n", first.x, second.x, third.x);
+    printf("%f, %f, %f\n", first.y, second.y, third.y);
+    printf("%f\n", third.length());
+    third = 3*third;
+    printf("%f\n", third.length());
 
 
 

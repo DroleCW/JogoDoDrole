@@ -1,0 +1,86 @@
+#include "graphics/quad.h"
+
+Quad::Quad(){
+    for(int i = 0; i < 4; i++){
+        vertices[i] = { 
+                        {0.0f, 0.0f},//position
+                        {1.0f, 1.0f, 1.0f, 1.0f},//color (opaque white)
+                        {0.0f, 0.0f}//texture coordinates
+                      };
+    }
+}
+
+Quad::~Quad(){
+    
+}
+
+void Quad::setPosition(const vec2f& pos){
+    vec2f size = vertices[3].position - vertices[0].position;
+
+    vertices[0].position = pos;
+    vertices[1].position = {pos.x + size.x, pos.y};
+    vertices[2].position = {pos.x + size.x, pos.y + size.y};
+    vertices[3].position = {pos.x, pos.y + size.y};
+}
+
+void Quad::move(const vec2f& delta){
+    vertices[0].position += delta;
+    vertices[1].position += delta;
+    vertices[2].position += delta;
+    vertices[3].position += delta;
+}
+
+void Quad::setSize(const vec2f& size){
+    vertices[1].position = {vertices[0].position.x + size.x, vertices[0].position.y};
+    vertices[2].position = {vertices[0].position.x + size.x, vertices[0].position.y + size.y};
+    vertices[3].position = {vertices[0].position.x, vertices[0].position.y + size.y};
+}
+
+void Quad::scale(float scalar){
+    vertices[1].position = vertices[0].position + scalar*(vertices[1].position - vertices[0].position);
+    vertices[2].position = vertices[0].position + scalar*(vertices[2].position - vertices[0].position);
+    vertices[3].position = vertices[0].position + scalar*(vertices[3].position - vertices[0].position);
+}
+
+void Quad::setWidth(float width){
+    vertices[1].position.x = vertices[0].position.x + width;
+    vertices[2].position.x = vertices[0].position.x + width;
+}
+
+void Quad::setHeight(float height){
+    vertices[2].position.y = vertices[0].position.y + height;
+    vertices[3].position.y = vertices[0].position.y + height;
+}
+
+void Quad::setTexturePosition(const vec2f& pos){
+    vec2f size = vertices[3].textureCoord - vertices[0].textureCoord;
+
+    vertices[0].textureCoord = pos;
+    vertices[1].textureCoord = {pos.x + size.x, pos.y};
+    vertices[2].textureCoord = {pos.x + size.x, pos.y + size.y};
+    vertices[3].textureCoord = {pos.x, pos.y + size.y};
+
+}
+
+void Quad::setTextureSize(const vec2f& size){
+    vertices[1].textureCoord = {vertices[0].textureCoord.x + size.x, vertices[0].textureCoord.y};
+    vertices[2].textureCoord = {vertices[0].textureCoord.x + size.x, vertices[0].textureCoord.y + size.y};
+    vertices[3].textureCoord = {vertices[0].textureCoord.x, vertices[0].textureCoord.y + size.y};
+}
+
+void Quad::setTextureWidth(float width){
+    vertices[1].textureCoord.x = vertices[0].textureCoord.x + width;
+    vertices[2].textureCoord.x = vertices[0].textureCoord.x + width;
+}
+
+void Quad::setTextureHeight(float height){
+    vertices[2].textureCoord.y = vertices[0].textureCoord.y + height;
+    vertices[3].textureCoord.y = vertices[0].textureCoord.y + height;
+}
+
+void Quad::setColor(vec4f colorRGBA){
+    vertices[0].color = colorRGBA;
+    vertices[1].color = colorRGBA;
+    vertices[2].color = colorRGBA;
+    vertices[3].color = colorRGBA;
+}

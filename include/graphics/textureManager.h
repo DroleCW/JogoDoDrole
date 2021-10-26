@@ -1,5 +1,7 @@
 #pragma once
 
+#define MAX_BOUND_TEXTURES
+
 #include "graphics/texture.h"
 #include "graphics/textureLocations.h"
 
@@ -10,8 +12,6 @@ class TextureManager{
     private:
         Texture* loadedTextures[NUMBER_OF_TEXTURES];
         char* texturePaths[NUMBER_OF_TEXTURES];
-
-
     
     public:
         TextureManager();
