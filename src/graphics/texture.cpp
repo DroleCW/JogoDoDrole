@@ -11,8 +11,9 @@ Texture::Texture(const char* path){
 
     data = nullptr;
 
+    glGenTextures(1, &textureObject);
+
     if(path){
-        glGenTextures(1, &textureObject);
         loadFromFile(path);
     }
 }

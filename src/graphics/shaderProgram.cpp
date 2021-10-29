@@ -92,7 +92,9 @@ void ShaderProgram::bind(){
     glUseProgram(id);
 }
 
-
+void ShaderProgram::setUniform(const char* name, int* v, int size){
+    glUniform1iv(glGetUniformLocation(id, name), size, v);
+}
 
 void ShaderProgram::setUniform(const char* name, int x){
     glUniform1i(glGetUniformLocation(id, name), x);

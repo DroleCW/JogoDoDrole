@@ -1,2 +1,3 @@
 1 ./assets/images/weez.jpg
 2 ./assets/images/weez.png
+3 ./assets/images/wheez2.jpg

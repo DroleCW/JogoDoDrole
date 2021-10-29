@@ -1,13 +1,24 @@
 #version 330 core
 layout (location = 0) in vec2 aPos;
-layout (location = 1) in vec2 aTextCoord;
+layout (location = 1) in vec4 aColor;
+layout (location = 2) in vec2 aTextCoord;
+layout (location = 3) in float aTextureSlot;
 
 out vec2 textCoord;
+out float textureSlot;
+out vec4 color;
 
-uniform vec2 translation;
+uniform vec2 worldTranslation;
+uniform vec2 screenTranslation;
+uniform vec2 scale;
 
 void main(){
-gl_Position = vec4(aPos.x + translation.x, aPos.y + translation.y, 0.0, 1.0);
-textCoord = aTextCoord;
+    gl_Position = vec4((aPos.x - worldTranslation.x)*scale.x + screenTranslation.x, -1*(aPos.y-worldTranslation.y)*scale.y + screenTranslation.y, 0.0, 1.0);
+
+    color = aColor;
+
+    textCoord = aTextCoord;
+    textureSlot = aTextureSlot;
+
 }
 

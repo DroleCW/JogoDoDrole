@@ -22,7 +22,6 @@ TextureManager::~TextureManager(){
 }
 
 bool TextureManager::loadTexture(TextureLocation textureIndex){
-
     if(loadedTextures[textureIndex] == nullptr){
         Texture* newTexture = new Texture();
         if(newTexture->loadFromFile(texturePaths[textureIndex])){

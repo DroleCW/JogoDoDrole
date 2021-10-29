@@ -30,4 +30,6 @@ class Quad{
 
         void setColor(vec4f colorRGBA);
 
+        const float* getDataf() const;
+
 };

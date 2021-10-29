@@ -84,3 +84,7 @@ void Quad::setColor(vec4f colorRGBA){
     vertices[2].color = colorRGBA;
     vertices[3].color = colorRGBA;
 }
+
+const float* Quad::getDataf() const{
+    return (float*)vertices;
+}

@@ -17,6 +17,8 @@ class ShaderProgram{
         void link();
         void bind();
 
+        void setUniform(const char* name, int* v, int size);
+
         void setUniform(const char* name, int x);
         void setUniform(const char* name, int x, int y);
         void setUniform(const char* name, int x, int y, int z);

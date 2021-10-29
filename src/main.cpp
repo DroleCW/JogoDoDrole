@@ -6,6 +6,7 @@
 #include "graphics/shaderProgram.h"
 #include "graphics/textureManager.h"
 #include "math/vec2f.h"
+#include "graphics/renderer.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -44,7 +45,7 @@ int main(){
         return -1;
     }
 
-    float vertices[16] = {
+    /* float vertices[16] = {
          0.0f, 0.5f, 0.0f, 0.0f,
         -0.5f, 0.0f, 0.0f, 250.0f,
          0.5f, 0.0f, 200.0f, 250.0f,
@@ -75,38 +76,33 @@ int main(){
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), (void*)(2*sizeof(float)));
-    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(1); */
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 
-    vec2f first(2, 3);
-    vec2f second(4, 5);
-    vec2f third = first+second;
-    printf("%f, %f, %f\n", first.x, second.x, third.x);
-    printf("%f, %f, %f\n", first.y, second.y, third.y);
-    printf("%f\n", third.length());
-    third = 3*third;
-    printf("%f\n", third.length());
-
 
 
     TextureManager testTextureManager;
+    View testView({0.0f, 0.0f}, {800.0f, 600.0f});
 
-    ShaderProgram testShaderProgram;
-    testShaderProgram.addShaderFromFile("shaders/simpleTestVertexShader.sdv");
-    testShaderProgram.addShaderFromFile("shaders/simpleTestFragmentShader.sdf");
-    testShaderProgram.link();
+    Renderer testRenderer(&testTextureManager, testView);
 
-    testShaderProgram.bind();
+    Quad testQuad;
+    testQuad.setPosition({100.0f, 100.0f});
+    testQuad.setSize({100.0f, 100.0f});
+    testQuad.setTextureSize({100.0f, 100.0f});
 
-    testShaderProgram.setUniform("textureSlot", 0);
+    Quad testQuad2;
+    testQuad2.setPosition({300.0f, 300.0f});
+    testQuad2.setSize({100.0f, 100.0f});
+    testQuad2.setTextureSize({300.0f, 300.0f});
 
-    float translationX = 0.0f;
-    float translationY = 0.0f;
+  
 
     testTextureManager.loadTexture(TEST_TEXTURE2_LOCATION);
-    testTextureManager.bindTexture(TEST_TEXTURE2_LOCATION, 0);
+    testTextureManager.loadTexture(TEST_TEXTURE3_LOCATION);
+    //testTextureManager.bindTexture(TEST_TEXTURE2_LOCATION, 0);
 
 
     // render loop
@@ -116,22 +112,11 @@ int main(){
         // -----
         processInput(window);
 
-        translationX += 0.01f;
-        translationY += 0.01f;
-
-        if(translationX > 1.2f){
-            translationX = 0.0f;
-            translationY = 0.0f;
-        }
-
-        testShaderProgram.setUniform("translation", translationX, translationY);
-
-        // render
-        // ------
-        glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-        //glDrawArrays(GL_TRIANGLE_FAN, 0, 3);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        testRenderer.clear();
+        testRenderer.renderQuad(testQuad, TEST_TEXTURE2_LOCATION);
+        testRenderer.renderQuad(testQuad2, TEST_TEXTURE3_LOCATION);
+        testRenderer.render();
+        
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
@@ -140,9 +125,9 @@ int main(){
     }
 
     //glDeleteProgram(shaderProgram);
-    glDeleteVertexArrays(1, &vao);
+    /* glDeleteVertexArrays(1, &vao);
     glDeleteBuffers(1, &vbo);
-    glDeleteBuffers(1, &ebo);
+    glDeleteBuffers(1, &ebo); */
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
     glfwTerminate();
