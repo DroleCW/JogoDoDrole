@@ -69,6 +69,7 @@ void Renderer::clear(){
 
 void Renderer::renderQuad(const Quad& quad, TextureLocation texture){
 
+
     unsigned int textureIndex;
     for(textureIndex = 0; textureIndex < boundTexturesCount && boundTextures[textureIndex]; textureIndex++);
 

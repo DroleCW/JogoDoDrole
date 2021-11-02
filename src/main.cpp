@@ -7,6 +7,7 @@
 #include "graphics/textureManager.h"
 #include "math/vec2f.h"
 #include "graphics/renderer.h"
+#include "graphics/sprite.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -45,66 +46,34 @@ int main(){
         return -1;
     }
 
-    /* float vertices[16] = {
-         0.0f, 0.5f, 0.0f, 0.0f,
-        -0.5f, 0.0f, 0.0f, 250.0f,
-         0.5f, 0.0f, 200.0f, 250.0f,
-         0.5f, 0.5f, 200.0f, 0.0f
-    };
-    unsigned int indices[6] = {
-        0, 1, 2,
-        0, 2, 3
-    };
-
-    unsigned int vbo;
-
-    unsigned int ebo;
-
-    unsigned int vao;
-
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glGenBuffers(1, &ebo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), (void*)(2*sizeof(float)));
-    glEnableVertexAttribArray(1); */
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-
-
 
     TextureManager testTextureManager;
     View testView({0.0f, 0.0f}, {800.0f, 600.0f});
 
     Renderer testRenderer(&testTextureManager, testView);
 
-    Quad testQuad;
-    testQuad.setPosition({100.0f, 100.0f});
-    testQuad.setSize({100.0f, 100.0f});
-    testQuad.setTextureSize({100.0f, 100.0f});
+    testTextureManager.loadTexture(TEST_TEXTURE2_LOCATION);
+    testTextureManager.loadTexture(TEST_TEXTURE3_LOCATION);
+
+    Sprite testSprite(TEST_TEXTURE2_LOCATION);
+    testSprite.setPosition({100.0f, 100.0f});
+    testSprite.setSize({67.0f, 62.0f});
+    testSprite.generateQuads({0.0f, 0.0f}, {201.0f, 251.0f}, 4, 3);
+
 
     Quad testQuad2;
     testQuad2.setPosition({300.0f, 300.0f});
     testQuad2.setSize({100.0f, 100.0f});
-    testQuad2.setTextureSize({300.0f, 300.0f});
+    testQuad2.setTexturePosition({80.0f, 80.0f});
+    testQuad2.setTextureSize({180.0f, 220.0f});
 
   
-
-    testTextureManager.loadTexture(TEST_TEXTURE2_LOCATION);
-    testTextureManager.loadTexture(TEST_TEXTURE3_LOCATION);
     //testTextureManager.bindTexture(TEST_TEXTURE2_LOCATION, 0);
 
 
+    short i = 0;
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window)){
@@ -112,8 +81,15 @@ int main(){
         // -----
         processInput(window);
 
+        i++;
+        if(i > 60){
+            i = 0;
+            testSprite.nextQuad();
+        } 
+        
+        
         testRenderer.clear();
-        testRenderer.renderQuad(testQuad, TEST_TEXTURE2_LOCATION);
+        testRenderer.renderQuad(testSprite, testSprite.getTexture());
         testRenderer.renderQuad(testQuad2, TEST_TEXTURE3_LOCATION);
         testRenderer.render();
         
@@ -123,11 +99,6 @@ int main(){
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
-
-    //glDeleteProgram(shaderProgram);
-    /* glDeleteVertexArrays(1, &vao);
-    glDeleteBuffers(1, &vbo);
-    glDeleteBuffers(1, &ebo); */
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
     glfwTerminate();

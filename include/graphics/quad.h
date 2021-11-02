@@ -24,11 +24,14 @@ class Quad{
         void setHeight(float height);
 
         void setTexturePosition(const vec2f& pos);
+        void moveTexture(const vec2f& delta);
         void setTextureSize(const vec2f&size);
         void setTextureWidth(float width);
         void setTextureHeight(float height);
 
         void setColor(vec4f colorRGBA);
+
+        inline const vec2f& getTexturePosition() const{return vertices[0].textureCoord;}
 
         const float* getDataf() const;
 

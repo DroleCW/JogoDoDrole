@@ -1,4 +1,5 @@
 #include "graphics/quad.h"
+#include <stdio.h>
 
 Quad::Quad(){
     for(int i = 0; i < 4; i++){
@@ -53,13 +54,20 @@ void Quad::setHeight(float height){
 }
 
 void Quad::setTexturePosition(const vec2f& pos){
-    vec2f size = vertices[3].textureCoord - vertices[0].textureCoord;
+    vec2f size = vertices[2].textureCoord - vertices[0].textureCoord;
 
     vertices[0].textureCoord = pos;
     vertices[1].textureCoord = {pos.x + size.x, pos.y};
     vertices[2].textureCoord = {pos.x + size.x, pos.y + size.y};
     vertices[3].textureCoord = {pos.x, pos.y + size.y};
 
+}
+
+void Quad::moveTexture(const vec2f& delta){
+    vertices[0].textureCoord += delta;
+    vertices[1].textureCoord += delta;
+    vertices[2].textureCoord += delta;
+    vertices[3].textureCoord += delta;
 }
 
 void Quad::setTextureSize(const vec2f& size){
