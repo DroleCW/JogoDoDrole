@@ -8,6 +8,7 @@
 #include "math/vec2f.h"
 #include "graphics/renderer.h"
 #include "graphics/sprite.h"
+#include "graphics/image.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -63,14 +64,9 @@ int main(){
     testSprite.generateQuads({0.0f, 0.0f}, {201.0f, 251.0f}, 4, 3);
 
 
-    Quad testQuad2;
-    testQuad2.setPosition({300.0f, 300.0f});
-    testQuad2.setSize({100.0f, 100.0f});
-    testQuad2.setTexturePosition({80.0f, 80.0f});
-    testQuad2.setTextureSize({180.0f, 220.0f});
-
-  
-    //testTextureManager.bindTexture(TEST_TEXTURE2_LOCATION, 0);
+    Image testImage(TEST_TEXTURE2_LOCATION, {80.0f, 80.0f}, {180.0f, 220.0f});
+    testImage.setPosition({300.0f, 300.0f});
+    testImage.setSize({100.0f, 100.0f});
 
 
     short i = 0;
@@ -90,7 +86,7 @@ int main(){
         
         testRenderer.clear();
         testRenderer.renderQuad(testSprite, testSprite.getTexture());
-        testRenderer.renderQuad(testQuad2, TEST_TEXTURE3_LOCATION);
+        testRenderer.renderQuad(testImage, testImage.getTexture());
         testRenderer.render();
         
 

@@ -25,7 +25,7 @@ class Sprite: public Quad{
         void nextQuad();
         void setQuad(short quadID);
 
+        inline void setTexture(TextureLocation texture){this->texture = texture;}
         inline TextureLocation getTexture() const{return texture;}
 
-    
 };
