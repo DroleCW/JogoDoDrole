@@ -71,7 +71,9 @@ void Renderer::renderQuad(const Quad& quad, TextureLocation texture){
 
 
     unsigned int textureIndex;
-    for(textureIndex = 0; textureIndex < boundTexturesCount && boundTextures[textureIndex]; textureIndex++);
+    for(textureIndex = 0; textureIndex < boundTexturesCount && boundTextures[textureIndex] != texture; textureIndex++);
+
+    printf("to: %i\n", textureIndex);
 
     if(textureIndex < MAX_TEXTURE_SLOTS && loadedQuads < MAX_QUADS_PER_DRAW){
         float renderData[36];
