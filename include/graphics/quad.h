@@ -1,6 +1,7 @@
 #pragma once
 #include "math/vec2f.h"
 #include "math/vec4f.h"
+#include "graphics/textureLocations.h"
 
 struct Vertex{
     vec2f position;
@@ -10,6 +11,7 @@ struct Vertex{
 
 class Quad{
     private:
+        TextureLocation texture;
         Vertex vertices[4];
 
     public:
@@ -32,6 +34,9 @@ class Quad{
         void setColor(vec4f colorRGBA);
 
         inline const vec2f& getTexturePosition() const{return vertices[0].textureCoord;}
+
+        inline void setTexture(TextureLocation texture){this->texture = texture;}
+        inline TextureLocation getTexture() const{return texture;}
 
         const float* getDataf() const;
 

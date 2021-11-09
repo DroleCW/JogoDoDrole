@@ -2,6 +2,7 @@
 
 in vec2 textCoord;
 in float textureSlot;
+in vec4 color;
 
 out vec4 FragColor;
 
@@ -9,6 +10,6 @@ uniform sampler2DRect textureSampler[15];
 
 void main(){
     int textureSlotIndex = int(textureSlot);
-    FragColor = texture(textureSampler[textureSlotIndex], textCoord);
+    FragColor = texture(textureSampler[textureSlotIndex], textCoord)*color;
 }
 

@@ -61,12 +61,14 @@ int main(){
     Sprite testSprite(TEST_TEXTURE2_LOCATION);
     testSprite.setPosition({100.0f, 100.0f});
     testSprite.setSize({67.0f, 62.0f});
+    testSprite.setColor({1.0f, 1.0f, 1.0f, 1.0f});
     testSprite.generateQuads({0.0f, 0.0f}, {201.0f, 251.0f}, 4, 3);
 
 
-    Image testImage(TEST_TEXTURE2_LOCATION, {80.0f, 80.0f}, {180.0f, 220.0f});
+    Image testImage(TEST_TEXTURE3_LOCATION, {80.0f, 80.0f}, {180.0f, 220.0f});
     testImage.setPosition({300.0f, 300.0f});
     testImage.setSize({100.0f, 100.0f});
+    testImage.setColor({0.0f, 1.0f, 1.0f, 1.0f});
 
 
     short i = 0;

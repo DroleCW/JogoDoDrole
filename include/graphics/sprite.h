@@ -6,7 +6,6 @@
 class Sprite: public Quad{
     
     private:
-        TextureLocation texture;
         vec2f textureOffset;    //position of the rectangle containing all quads 
         vec2f textureSize;      //size of the rectangle containing all quads 
         vec2f quadSize;         //size of the individual quad
@@ -24,8 +23,5 @@ class Sprite: public Quad{
 
         void nextQuad();
         void setQuad(short quadID);
-
-        inline void setTexture(TextureLocation texture){this->texture = texture;}
-        inline TextureLocation getTexture() const{return texture;}
 
 };

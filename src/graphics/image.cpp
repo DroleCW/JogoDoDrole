@@ -1,6 +1,6 @@
 #include "graphics/image.h"
 
-Image::Image(TextureLocation texture = NO_TEXTURE_LOCATION){
+Image::Image(TextureLocation texture){
 
     setTexturePosition({0.0f, 0.0f});
     setTextureSize({0.0f, 0.0f});
@@ -8,7 +8,7 @@ Image::Image(TextureLocation texture = NO_TEXTURE_LOCATION){
     setPosition({0.0f, 0.0f});
     setSize({0.0f, 0.0f});
 
-    this->texture = texture;
+    setTexture(texture);
 }
 
 Image::Image(TextureLocation texture, const vec2f& offset, const vec2f& totalSize){
@@ -18,7 +18,7 @@ Image::Image(TextureLocation texture, const vec2f& offset, const vec2f& totalSiz
     setPosition({0.0f, 0.0f});
     setSize(totalSize);
 
-    this->texture = texture;
+    setTexture(texture);
 
 }
 

@@ -2,16 +2,16 @@
 #include <stdio.h>
 
 Sprite::Sprite(TextureLocation texture){
-    this->texture = texture;
+    setTexture(texture);
 }
 
 Sprite::Sprite(TextureLocation texture, const vec2f& offset, const vec2f& totalSize, const vec2f& quadSize){
-    this->texture = texture;
+    setTexture(texture);
     generateQuads(offset, totalSize, quadSize);
 }
 
 Sprite::Sprite(TextureLocation texture, const vec2f& offset, const vec2f& totalSize, short lines, short columns){
-    this->texture = texture;
+    setTexture(texture);
     generateQuads(offset, totalSize, lines, columns);
 }
 
