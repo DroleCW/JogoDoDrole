@@ -11,6 +11,7 @@ Quad::Quad(){
     }
 }
 
+
 Quad::~Quad(){
     
 }
