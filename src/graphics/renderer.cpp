@@ -1,6 +1,7 @@
 #include "graphics/renderer.h"
 
 #include <glad/glad.h>
+#include <cstring>
 
 Renderer::Renderer(TextureManager* pTextureManager, const View& view):rendererShader(), rendererView(view){
 
