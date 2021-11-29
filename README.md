@@ -12,7 +12,7 @@ cmake --build build
 
 ## Executar:
 ```
-./build/game
+./bin/game
 ```
 
 ** Tudo relativo a pasta raiz **
