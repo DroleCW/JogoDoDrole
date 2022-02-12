@@ -133,13 +133,14 @@ class InputManager{
         static bool pressedKeys[Keys::NumberOfKeys];
         static bool heldKeys[Keys::NumberOfKeys];
         static bool releasedKeys[Keys::NumberOfKeys];
-    public:
+
         InputManager();
         ~InputManager();
+    public:
 
-        bool wasKeyPressed(Keys key);
-        bool wasKeyReleased(Keys key);
-        bool isKeyPressed(Keys key);
+        static bool wasKeyPressed(Keys key);
+        static bool wasKeyReleased(Keys key);
+        static bool isKeyPressed(Keys key);
 
         static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
         static void pollEvents(GLFWwindow* hindowHandle);

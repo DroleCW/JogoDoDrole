@@ -25,6 +25,7 @@ void Window::createWindow(unsigned int screenWidth, unsigned int screenHeight, c
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_VERSION_MAJOR);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_VERSION_MINOR);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    //glfwWindowHint(GLFW_REFRESH_RATE, GLFW_DONT_CARE);
     #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     #endif
@@ -36,7 +37,9 @@ void Window::createWindow(unsigned int screenWidth, unsigned int screenHeight, c
         return;
     }
     glfwMakeContextCurrent(windowHandle);
+    //glfwSwapInterval(0);
     glfwSetFramebufferSizeCallback(windowHandle, framebuffer_size_callback);
+    glfwSetKeyCallback(windowHandle, InputManager::key_callback);
 
     initOpenGL();
 }
@@ -73,6 +76,7 @@ void Window::setShouldClose(){
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
 void Window::framebuffer_size_callback(GLFWwindow* window, int width, int height){
+    printf("size callback\n");
     // make sure the viewport matches the new window dimensions; note that width and 
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);

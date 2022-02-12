@@ -19,10 +19,9 @@ int main(){
 
 
     Window mainWindow(SCR_WIDTH, SCR_HEIGHT, "abstracted window");
-    InputManager mainInputManager;
 
     TextureManager testTextureManager;
-    View testView({0.0f, 0.0f}, {800.0f, 600.0f});
+    View testView({0.0f, 0.0f}, {800.0f, 600.0f}, {-1.0f, 1.0f}, {2.0f, 2.0f});
 
     Renderer testRenderer(&testTextureManager, testView);
 
@@ -44,13 +43,25 @@ int main(){
     // render loop
     // -----------
     while (!mainWindow.getShouldClose()){
-
         i++;
         if(i > 60){
             i = 0;
             testSprite.nextQuad();
-        }   
-        
+        }
+
+        if(InputManager::isKeyPressed(Keys::D)){
+            testImage.move({2.0f, 0.0f});
+        }
+        if(InputManager::isKeyPressed(Keys::W)){
+            testImage.move({0.0f, -2.0f});
+        }
+        if(InputManager::isKeyPressed(Keys::A)){
+            testImage.move({-2.0f, 0.0f});
+        }
+        if(InputManager::isKeyPressed(Keys::S)){
+            testImage.move({0.0f, 2.0f});
+        }
+
         testRenderer.clear();
         testRenderer.renderQuad(testSprite, testSprite.getTexture());
         testRenderer.renderQuad(testImage, testImage.getTexture());
