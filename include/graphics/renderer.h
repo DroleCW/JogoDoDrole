@@ -4,6 +4,7 @@
 #include "graphics/shaderProgram.h"
 #include "graphics/view.h"
 #include "graphics/quad.h"
+#include "graphics/text/text.h"
 
 #define MAX_QUADS_PER_DRAW      1000
 #define RENDERER_BUFFER_SIZE    MAX_QUADS_PER_DRAW*sizeof(Quad)
@@ -23,6 +24,7 @@ class Renderer{
         unsigned int bufferOffset;
 
         TextureLocation boundTextures[MAX_TEXTURE_SLOTS];
+        std::vector<Font*> usedFonts;
         unsigned int boundTexturesCount;
         unsigned int loadedQuads;
         int textureSlots[MAX_TEXTURE_SLOTS];
@@ -39,7 +41,8 @@ class Renderer{
         ~Renderer();
 
         void clear();
-        void renderQuad(const Quad& quad, TextureLocation texture);
+        void renderQuad(const Quad& quad);
+        void renderText(Text& quad);
         void render();
 
         inline void setRenderer(TextureManager* textureManager) {pTextureManager = textureManager;}

@@ -42,6 +42,11 @@ bool Texture::loadFromFile(const char* path){
     }
 }
 
+void Texture::setData(unsigned char* data){
+    if(this->data != data)
+        delete this->data;
+    this->data = data;
+}
 
 int Texture::getWidth() const{
     return width;
@@ -56,9 +61,19 @@ int Texture::getChannels() const{
 }
 
 void Texture::bind(int slot) const{
+
     glActiveTexture(GL_TEXTURE0 + slot);
     glBindTexture(GL_TEXTURE_RECTANGLE, textureObject);
     glTexParameteri(GL_TEXTURE_RECTANGLE, GL_TEXTURE_WRAP_S, GL_REPEAT);	
     glTexParameteri(GL_TEXTURE_RECTANGLE, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+
+    if(channels == 4){
+        glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    }
+    if(channels == 3){
+        glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    }
+    else if(channels == 1){
+        glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RED, width, height, 0, GL_ALPHA, GL_UNSIGNED_BYTE, data);
+    }
 }

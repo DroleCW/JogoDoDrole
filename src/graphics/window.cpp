@@ -57,7 +57,10 @@ void Window::initOpenGL(){
         return;
     }
 
+    glEnable(GL_BLEND);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
+    glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void Window::refresh(){

@@ -68,11 +68,10 @@ void Renderer::clear(){
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void Renderer::renderQuad(const Quad& quad, TextureLocation texture){
-
+void Renderer::renderQuad(const Quad& quad){
 
     unsigned int textureIndex;
-    for(textureIndex = 0; textureIndex < boundTexturesCount && boundTextures[textureIndex] != texture; textureIndex++);
+    for(textureIndex = 0; textureIndex < boundTexturesCount && boundTextures[textureIndex] != quad.getTexture(); textureIndex++);
 
     if(textureIndex < MAX_TEXTURE_SLOTS && loadedQuads < MAX_QUADS_PER_DRAW){
         float renderData[36];
@@ -90,20 +89,59 @@ void Renderer::renderQuad(const Quad& quad, TextureLocation texture){
     
         if(textureIndex == boundTexturesCount){
             boundTexturesCount++;
-            boundTextures[textureIndex] = texture;
+            boundTextures[textureIndex] = quad.getTexture();
         }
 
         loadedQuads++;
     }
     else{
         render();
-        renderQuad(quad, texture);
+        renderQuad(quad);
+    }
+
+}
+
+void Renderer::renderText(Text& text){
+
+    unsigned int fontIndex;
+    for(fontIndex = 0; fontIndex < usedFonts.size() && usedFonts[fontIndex] != text.getFont(); fontIndex++);
+    if(fontIndex == usedFonts.size())
+        usedFonts.push_back(text.getFont());
+
+    unsigned int textureIndex;
+    for(textureIndex = 0; textureIndex < boundTexturesCount && boundTextures[textureIndex] != NUMBER_OF_TEXTURES + fontIndex; textureIndex++);
+
+    if(textureIndex < MAX_TEXTURE_SLOTS && loadedQuads + text.getContentSize() < MAX_QUADS_PER_DRAW){
+        text.resetIterator();
+        for(Image* quad = text.getNextCharacter(); quad != nullptr; quad = text.getNextCharacter()){
+            float renderData[36];
+            memcpy(renderData, quad->getDataf(), sizeof(Vertex));
+            renderData[8] = (float)textureIndex;
+            memcpy(renderData+9, quad->getDataf()+8, sizeof(Vertex));
+            renderData[17] = (float)textureIndex;
+            memcpy(renderData+18, quad->getDataf()+16, sizeof(Vertex));
+            renderData[26] = (float)textureIndex;
+            memcpy(renderData+27, quad->getDataf()+24, sizeof(Vertex));
+            renderData[35] = (float)textureIndex;
+            glBindBuffer(GL_ARRAY_BUFFER, rendererVertexBuffer);
+            glBufferSubData(GL_ARRAY_BUFFER, loadedQuads*4*(sizeof(Vertex)+sizeof(float)), 4*(sizeof(Vertex)+sizeof(float)), renderData);
+        
+            if(textureIndex == boundTexturesCount){
+                boundTexturesCount++;
+                boundTextures[textureIndex] = (TextureLocation)(NUMBER_OF_TEXTURES + fontIndex);
+            }
+
+            loadedQuads++;
+        }
+    }
+    else{
+        render();
+        renderText(text);
     }
 
 }
 
 void Renderer::render(){
-
     rendererShader.bind();
     glBindVertexArray(rendererVertexArray);
     //view transform uniforms
@@ -111,15 +149,20 @@ void Renderer::render(){
     rendererShader.setUniform("scale", rendererView.getTargetSize().x/rendererView.getSourceSize().x, rendererView.getTargetSize().y/rendererView.getSourceSize().y);
     rendererShader.setUniform("screenTranslation", rendererView.getTargetPosition().x, rendererView.getTargetPosition().y);
 
-
     //texture uniforms
     rendererShader.setUniform("textureSampler", textureSlots, boundTexturesCount);
 
-    for(unsigned int i = 0; i < boundTexturesCount; i++)
-        pTextureManager->bindTexture(boundTextures[i], i);
-
+    for(unsigned int i = 0; i < boundTexturesCount; i++){
+        if(boundTextures[i] >= NUMBER_OF_TEXTURES){
+            usedFonts[boundTextures[i]-NUMBER_OF_TEXTURES]->getTexture()->bind(i);
+        }
+        else{
+            pTextureManager->bindTexture(boundTextures[i], i);
+        }
+    }
     glDrawElements(GL_TRIANGLES, 6*loadedQuads, GL_UNSIGNED_INT, 0);
 
     boundTexturesCount = 0;
     loadedQuads = 0;
+    usedFonts.clear();
 }

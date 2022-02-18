@@ -9,7 +9,9 @@
 #include "graphics/image.h"
 #include "graphics/window.h"
 #include "managers/inputManager.h"
-
+#include "graphics/text/fontManager.h"
+#include "graphics/text/text.h"
+#include <string>
 
 // settings
 const unsigned int SCR_WIDTH = 800;
@@ -22,6 +24,13 @@ int main(){
 
     TextureManager testTextureManager;
     View testView({0.0f, 0.0f}, {800.0f, 600.0f}, {-1.0f, 1.0f}, {2.0f, 2.0f});
+
+    FontManager testFontManager;
+    testFontManager.loadFont(TEST_FONT1_LOCATION, 50);
+    Text testText;
+    testText.setFont(testFontManager.getFont(TEST_FONT1_LOCATION, 50));
+    testText.setText("Drole");
+    testText.setPosition({10.0f, 50.0f});
 
     Renderer testRenderer(&testTextureManager, testView);
 
@@ -63,8 +72,9 @@ int main(){
         }
 
         testRenderer.clear();
-        testRenderer.renderQuad(testSprite, testSprite.getTexture());
-        testRenderer.renderQuad(testImage, testImage.getTexture());
+        testRenderer.renderQuad(testSprite);
+        testRenderer.renderQuad(testImage);
+        testRenderer.renderText(testText);
         testRenderer.render();
         
         // swap buffers and poll IO events

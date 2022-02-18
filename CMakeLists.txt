@@ -9,11 +9,13 @@ file(GLOB_RECURSE SOURCES RELATIVE ${CMAKE_SOURCE_DIR} "src/*.cpp")
 add_executable(game ${SOURCES})
 
 include_directories(include)
+include_directories(include/graphics/text)
 
 set_target_properties(game PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 if(WIN32)
-	target_link_libraries(game ${CMAKE_CURRENT_SOURCE_DIR}/glfw-bin/libglfw3dll.a)
+	target_link_libraries(game ${CMAKE_CURRENT_SOURCE_DIR}/lib/libglfw3dll.a)
+	target_link_libraries(game ${CMAKE_CURRENT_SOURCE_DIR}/lib/libfreetype.a)
 endif()
 
 if(UNIX)
