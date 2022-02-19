@@ -44,16 +44,16 @@ Renderer::Renderer(TextureManager* pTextureManager, const View& view):rendererSh
 
     //vertex attributes setup
     //position
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 9*sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 10*sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
     //color
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 9*sizeof(float), (void*)(2*sizeof(float)));
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 10*sizeof(float), (void*)(3*sizeof(float)));
     glEnableVertexAttribArray(1);
     //texture coord
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 9*sizeof(float), (void*)(6*sizeof(float)));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 10*sizeof(float), (void*)(7*sizeof(float)));
     glEnableVertexAttribArray(2);
     //texture index
-    glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, 9*sizeof(float), (void*)(8*sizeof(float)));
+    glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, 10*sizeof(float), (void*)(9*sizeof(float)));
     glEnableVertexAttribArray(3);
 }
 
@@ -65,7 +65,7 @@ Renderer::~Renderer(){
 
 void Renderer::clear(){
     glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  
 }
 
 void Renderer::renderQuad(const Quad& quad){
@@ -74,15 +74,15 @@ void Renderer::renderQuad(const Quad& quad){
     for(textureIndex = 0; textureIndex < boundTexturesCount && boundTextures[textureIndex] != quad.getTexture(); textureIndex++);
 
     if(textureIndex < MAX_TEXTURE_SLOTS && loadedQuads < MAX_QUADS_PER_DRAW){
-        float renderData[36];
+        float renderData[40];
         memcpy(renderData, quad.getDataf(), sizeof(Vertex));
-        renderData[8] = (float)textureIndex;
-        memcpy(renderData+9, quad.getDataf()+8, sizeof(Vertex));
-        renderData[17] = (float)textureIndex;
-        memcpy(renderData+18, quad.getDataf()+16, sizeof(Vertex));
-        renderData[26] = (float)textureIndex;
-        memcpy(renderData+27, quad.getDataf()+24, sizeof(Vertex));
-        renderData[35] = (float)textureIndex;
+        renderData[9] = (float)textureIndex;
+        memcpy(renderData+10, quad.getDataf()+9, sizeof(Vertex));
+        renderData[19] = (float)textureIndex;
+        memcpy(renderData+20, quad.getDataf()+18, sizeof(Vertex));
+        renderData[29] = (float)textureIndex;
+        memcpy(renderData+30, quad.getDataf()+27, sizeof(Vertex));
+        renderData[39] = (float)textureIndex;
 
         glBindBuffer(GL_ARRAY_BUFFER, rendererVertexBuffer);
         glBufferSubData(GL_ARRAY_BUFFER, loadedQuads*4*(sizeof(Vertex)+sizeof(float)), 4*(sizeof(Vertex)+sizeof(float)), renderData);
@@ -114,15 +114,15 @@ void Renderer::renderText(Text& text){
     if(textureIndex < MAX_TEXTURE_SLOTS && loadedQuads + text.getContentSize() < MAX_QUADS_PER_DRAW){
         text.resetIterator();
         for(Image* quad = text.getNextCharacter(); quad != nullptr; quad = text.getNextCharacter()){
-            float renderData[36];
+            float renderData[40];
             memcpy(renderData, quad->getDataf(), sizeof(Vertex));
-            renderData[8] = (float)textureIndex;
-            memcpy(renderData+9, quad->getDataf()+8, sizeof(Vertex));
-            renderData[17] = (float)textureIndex;
-            memcpy(renderData+18, quad->getDataf()+16, sizeof(Vertex));
-            renderData[26] = (float)textureIndex;
-            memcpy(renderData+27, quad->getDataf()+24, sizeof(Vertex));
-            renderData[35] = (float)textureIndex;
+            renderData[9] = (float)textureIndex;
+            memcpy(renderData+10, quad->getDataf()+9, sizeof(Vertex));
+            renderData[19] = (float)textureIndex;
+            memcpy(renderData+20, quad->getDataf()+18, sizeof(Vertex));
+            renderData[29] = (float)textureIndex;
+            memcpy(renderData+30, quad->getDataf()+27, sizeof(Vertex));
+            renderData[39] = (float)textureIndex;
             glBindBuffer(GL_ARRAY_BUFFER, rendererVertexBuffer);
             glBufferSubData(GL_ARRAY_BUFFER, loadedQuads*4*(sizeof(Vertex)+sizeof(float)), 4*(sizeof(Vertex)+sizeof(float)), renderData);
         

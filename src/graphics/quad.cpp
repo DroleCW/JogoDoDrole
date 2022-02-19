@@ -5,6 +5,7 @@ Quad::Quad(){
     for(int i = 0; i < 4; i++){
         vertices[i] = { 
                         {0.0f, 0.0f},//position
+                        0.0f,
                         {1.0f, 1.0f, 1.0f, 1.0f},//color (opaque white)
                         {0.0f, 0.0f}//texture coordinates
                       };
@@ -52,6 +53,14 @@ void Quad::setWidth(float width){
 void Quad::setHeight(float height){
     vertices[2].position.y = vertices[0].position.y + height;
     vertices[3].position.y = vertices[0].position.y + height;
+}
+
+void Quad::setLayer(float layer){
+    layer = (layer - 50)/50;
+    vertices[0].layer = layer;
+    vertices[1].layer = layer;
+    vertices[2].layer = layer;
+    vertices[3].layer = layer;
 }
 
 void Quad::setTexturePosition(const vec2f& pos){

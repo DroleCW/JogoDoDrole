@@ -13,6 +13,7 @@ class Text{
         vec2f pos;
         vec2f cursor;
         vec4f color;
+        float layer;
         int index;
         float lineSpacing;
 
@@ -43,5 +44,6 @@ class Text{
         void move(vec2f delta);
 
         void setColor(vec4f colorRGBA);
+        void setLayer(float layer);
 
 };

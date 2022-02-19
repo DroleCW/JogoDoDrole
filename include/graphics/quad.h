@@ -5,6 +5,7 @@
 
 struct Vertex{
     vec2f position;
+    float layer;
     vec4f color;
     vec2f textureCoord;
 };
@@ -24,6 +25,7 @@ class Quad{
         void scale(float scalar);
         void setWidth(float width);
         void setHeight(float height);
+        void setLayer(float layer);
 
         void setTexturePosition(const vec2f& pos);
         void moveTexture(const vec2f& delta);

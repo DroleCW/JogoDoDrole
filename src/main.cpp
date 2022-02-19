@@ -34,6 +34,7 @@ int main(){
     testText.appendText("\nDrule");
     testText.setPosition({10.0f, 50.0f});
     testText.setColor({1.0f, 0.1f, 0.1f, 1.0f});
+    testText.setLayer(2);
 
     Renderer testRenderer(&testTextureManager, testView);
 
@@ -45,11 +46,13 @@ int main(){
     testSprite.setSize({67.0f, 62.0f});
     testSprite.setColor({1.0f, 1.0f, 1.0f, 1.0f});
     testSprite.generateQuads({0.0f, 0.0f}, {201.0f, 251.0f}, 4, 3);
+    testSprite.setLayer(1);
 
     Image testImage(TEST_TEXTURE3_LOCATION, {80.0f, 80.0f}, {180.0f, 220.0f});
     testImage.setPosition({300.0f, 300.0f});
     testImage.setSize({100.0f, 100.0f});
     testImage.setColor({0.0f, 1.0f, 1.0f, 1.0f});
+    testImage.setLayer(3);
 
     short i = 0;
     // render loop

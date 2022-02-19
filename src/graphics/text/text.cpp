@@ -6,6 +6,7 @@ Text::Text(){
     color = {0.0f, 0.0f, 0.0f, 0.0f};
     font = nullptr;
     lineSpacing = 0;
+    layer = 0;
 }
 
 Text::~Text(){
@@ -33,6 +34,7 @@ void Text::appendText(const std::string& text){
                 characters.back().setPosition(pos+cursor+font->getCharBearing(*i));
                 characters.back().setSize(font->getCharSize(*i));
                 characters.back().setColor(color);
+                characters.back().setLayer(layer);
                 cursor.x += font->getCharAdvance(*i);
         }
     }
@@ -71,5 +73,12 @@ void Text::setColor(vec4f colorRGBA){
     color = colorRGBA;
     for(auto i = characters.begin(); i != characters.end(); i++){
         i->setColor(colorRGBA);
+    }
+}
+
+void Text::setLayer(float layer){
+    this->layer = layer;
+    for(auto i = characters.begin(); i != characters.end(); i++){
+        i->setLayer(layer);
     }
 }
