@@ -12,7 +12,7 @@ class TextureManager{
     private:
         Texture* loadedTextures[NUMBER_OF_TEXTURES];
         char* texturePaths[NUMBER_OF_TEXTURES];
-    
+        int totalLoadedTextures;
     public:
         TextureManager();
         ~TextureManager();
@@ -23,5 +23,9 @@ class TextureManager{
         Texture* getTexture(TextureLocation textureIndex);
 
         bool loadTexturePaths(const char* indicesFilePath);
+
+        inline int getLoadedTextures() const{
+            return totalLoadedTextures;
+        }
 
 };

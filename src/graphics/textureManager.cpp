@@ -6,6 +6,8 @@ TextureManager::TextureManager(){
 
     loadTexturePaths(TEXTURE_INDEX_FILE);
 
+    totalLoadedTextures = 0;
+
 }
 
 TextureManager::~TextureManager(){
@@ -26,6 +28,7 @@ bool TextureManager::loadTexture(TextureLocation textureIndex){
         Texture* newTexture = new Texture();
         if(newTexture->loadFromFile(texturePaths[textureIndex])){
             loadedTextures[textureIndex] = newTexture;
+            totalLoadedTextures++;
             return true;
         }
         else{
@@ -42,6 +45,7 @@ void TextureManager::unloadTexture(TextureLocation textureIndex){
     if(loadedTextures[textureIndex]){
         delete loadedTextures[textureIndex];
         loadedTextures[textureIndex] = nullptr;
+        totalLoadedTextures--;
     }
 }
 

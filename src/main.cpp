@@ -29,8 +29,11 @@ int main(){
     testFontManager.loadFont(TEST_FONT1_LOCATION, 50);
     Text testText;
     testText.setFont(testFontManager.getFont(TEST_FONT1_LOCATION, 50));
-    testText.setText("Drole");
+    testText.setLineSpacing(50);
+    testText.setText("Drole\nDrile");
+    testText.appendText("\nDrule");
     testText.setPosition({10.0f, 50.0f});
+    testText.setColor({1.0f, 0.1f, 0.1f, 1.0f});
 
     Renderer testRenderer(&testTextureManager, testView);
 

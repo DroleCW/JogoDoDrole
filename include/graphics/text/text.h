@@ -3,7 +3,7 @@
 #include "graphics/text/font.h"
 #include <string>
 #include <vector>
-#include <graphics/image.h>
+#include "graphics/image.h"
 
 class Text{
     private:
@@ -11,7 +11,11 @@ class Text{
         Font* font;
         std::vector<Image> characters;
         vec2f pos;
+        vec2f cursor;
+        vec4f color;
         int index;
+        float lineSpacing;
+
 
     public:
         Text();
@@ -28,10 +32,16 @@ class Text{
             return font;
         }
 
+        inline void setLineSpacing(float spacing){
+            lineSpacing = spacing;
+        }
+
         Image* getNextCharacter();
         void resetIterator();
 
         void setPosition(vec2f pos);
         void move(vec2f delta);
+
+        void setColor(vec4f colorRGBA);
 
 };

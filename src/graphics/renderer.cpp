@@ -162,7 +162,11 @@ void Renderer::render(){
     }
     glDrawElements(GL_TRIANGLES, 6*loadedQuads, GL_UNSIGNED_INT, 0);
 
-    boundTexturesCount = 0;
+    if(boundTexturesCount == MAX_TEXTURE_SLOTS || pTextureManager->getLoadedTextures() > MAX_TEXTURE_SLOTS){
+        boundTexturesCount = 0;
+        usedFonts.clear();
+    }
+
     loadedQuads = 0;
-    usedFonts.clear();
+    
 }
