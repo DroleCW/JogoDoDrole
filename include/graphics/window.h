@@ -1,11 +1,11 @@
 #pragma once
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include "glad/glad.h"
+#include "GLFW/glfw3.h"
 
 
 #define OPENGL_VERSION_MAJOR 4
-#define OPENGL_VERSION_MINOR 5
+#define OPENGL_VERSION_MINOR 2
 
 
 class Window{

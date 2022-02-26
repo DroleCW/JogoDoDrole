@@ -11,6 +11,7 @@
 #include "managers/inputManager.h"
 #include "graphics/text/fontManager.h"
 #include "graphics/text/text.h"
+#include "sound/soundManager.h"
 #include <string>
 
 // settings
@@ -18,7 +19,6 @@ const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
 int main(){
-
 
     Window mainWindow(SCR_WIDTH, SCR_HEIGHT, "abstracted window");
 
@@ -54,6 +54,15 @@ int main(){
     testImage.setColor({0.0f, 1.0f, 1.0f, 1.0f});
     testImage.setLayer(3);
 
+    SoundManager::init();
+    SoundManager::loadSound(TEST_SOUND1_LOCATION);
+    SoundManager::loadSound(TEST_SOUND2_LOCATION);
+    SoundSource testSoundSource1;
+    SoundSource testSoundSource2;
+    testSoundSource1.queueSound(TEST_SOUND1_LOCATION);
+    testSoundSource1.play();
+    testSoundSource2.attachSound(TEST_SOUND2_LOCATION);
+
     short i = 0;
     // render loop
     // -----------
@@ -76,6 +85,9 @@ int main(){
         if(InputManager::isKeyPressed(Keys::S)){
             testImage.move({0.0f, 2.0f});
         }
+        if(InputManager::wasKeyPressed(Keys::G)){           
+            testSoundSource2.play();
+        }
 
         testRenderer.clear();
         testRenderer.renderQuad(testSprite);
@@ -88,6 +100,14 @@ int main(){
         mainWindow.refresh();
 
     }
+    testSoundSource1.clear();
+    testSoundSource2.clear();
+    SoundManager::unloadSound(TEST_SOUND1_LOCATION);
+    SoundManager::unloadSound(TEST_SOUND2_LOCATION);
+    SoundManager::terminate();
+    testFontManager.unloadFont(TEST_FONT1_LOCATION, 50);
+    testTextureManager.unloadTexture(TEST_TEXTURE2_LOCATION);
+    testTextureManager.unloadTexture(TEST_TEXTURE3_LOCATION);
     return 0;
 }
 

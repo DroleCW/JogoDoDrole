@@ -25,7 +25,7 @@ void Window::createWindow(unsigned int screenWidth, unsigned int screenHeight, c
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_VERSION_MAJOR);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_VERSION_MINOR);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    //glfwWindowHint(GLFW_REFRESH_RATE, GLFW_DONT_CARE);
+    glfwWindowHint(GLFW_REFRESH_RATE, 60);
     #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     #endif
@@ -37,7 +37,7 @@ void Window::createWindow(unsigned int screenWidth, unsigned int screenHeight, c
         return;
     }
     glfwMakeContextCurrent(windowHandle);
-    //glfwSwapInterval(0);
+    glfwSwapInterval(1);
     glfwSetFramebufferSizeCallback(windowHandle, framebuffer_size_callback);
     glfwSetKeyCallback(windowHandle, InputManager::key_callback);
 

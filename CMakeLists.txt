@@ -16,6 +16,9 @@ set_target_properties(game PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_S
 if(WIN32)
 	target_link_libraries(game ${CMAKE_CURRENT_SOURCE_DIR}/lib/libglfw3dll.a)
 	target_link_libraries(game ${CMAKE_CURRENT_SOURCE_DIR}/lib/libfreetype.a)
+	target_link_libraries(game ${CMAKE_CURRENT_SOURCE_DIR}/lib/libOpenAL32.dll.a)
+	target_link_libraries(game ${CMAKE_CURRENT_SOURCE_DIR}/lib/libsndfile-1.lib)
+	
 endif()
 
 if(UNIX)

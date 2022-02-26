@@ -7,9 +7,7 @@ Renderer::Renderer(TextureManager* pTextureManager, const View& view):rendererSh
 
     this->pTextureManager = pTextureManager;
     boundTexturesCount = 0;
-
-    for(int i = 0; i < MAX_TEXTURE_SLOTS; i++)
-        textureSlots[i] = i;
+   
 
     //shader setup
     rendererShader.addShaderFromFile(VERTEX_SHADER_PATH);
@@ -149,7 +147,8 @@ void Renderer::render(){
     rendererShader.setUniform("scale", rendererView.getTargetSize().x/rendererView.getSourceSize().x, rendererView.getTargetSize().y/rendererView.getSourceSize().y);
     rendererShader.setUniform("screenTranslation", rendererView.getTargetPosition().x, rendererView.getTargetPosition().y);
 
-    //texture uniforms
+    for(int i = 0; i < MAX_TEXTURE_SLOTS; i++)
+        textureSlots[i] = i;
     rendererShader.setUniform("textureSampler", textureSlots, boundTexturesCount);
 
     for(unsigned int i = 0; i < boundTexturesCount; i++){

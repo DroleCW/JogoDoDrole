@@ -1,0 +1,2 @@
+1 ./assets/sounds/weez.wav
+2 ./assets/sounds/garra.wav

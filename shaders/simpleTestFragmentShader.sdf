@@ -1,15 +1,46 @@
-#version 450 core
+#version 420 core
 
 in vec2 textCoord;
-in float textureSlot;
+flat in int textureSlot;
 in vec4 color;
 
 out vec4 FragColor;
 
-uniform sampler2DRect textureSampler[15];
+uniform sampler2DRect textureSampler[16];
 
 void main(){
-    int textureSlotIndex = int(textureSlot);
-    FragColor = texture(textureSampler[textureSlotIndex], textCoord)*color;
+    //int textureSlotIndex = int(textureSlot);
+    if(textureSlot == 0)
+        FragColor = texture(textureSampler[0], textCoord)*color;
+    else if(textureSlot == 1)
+        FragColor = texture(textureSampler[1], textCoord)*color;
+    else if(textureSlot == 2)
+        FragColor = texture(textureSampler[2], textCoord)*color;
+    else if(textureSlot == 3)
+        FragColor = texture(textureSampler[3], textCoord)*color;
+    else if(textureSlot == 4)
+        FragColor = texture(textureSampler[4], textCoord)*color;
+    else if(textureSlot == 5)
+        FragColor = texture(textureSampler[5], textCoord)*color;
+    else if(textureSlot == 6)
+        FragColor = texture(textureSampler[6], textCoord)*color;
+    else if(textureSlot == 7)
+        FragColor = texture(textureSampler[7], textCoord)*color;
+    else if(textureSlot == 8)
+        FragColor = texture(textureSampler[8], textCoord)*color;
+    else if(textureSlot == 9)
+        FragColor = texture(textureSampler[9], textCoord)*color;
+    else if(textureSlot == 10)
+        FragColor = texture(textureSampler[10], textCoord)*color;
+    else if(textureSlot == 11)
+        FragColor = texture(textureSampler[11], textCoord)*color;
+    else if(textureSlot == 12)
+        FragColor = texture(textureSampler[12], textCoord)*color;
+    else if(textureSlot == 13)
+        FragColor = texture(textureSampler[13], textCoord)*color;
+    else if(textureSlot == 14)
+        FragColor = texture(textureSampler[14], textCoord)*color;
+    else if(textureSlot == 15)
+        FragColor = texture(textureSampler[14], textCoord)*color;
 }
 

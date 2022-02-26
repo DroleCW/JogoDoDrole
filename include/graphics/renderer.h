@@ -24,10 +24,10 @@ class Renderer{
         unsigned int bufferOffset;
 
         TextureLocation boundTextures[MAX_TEXTURE_SLOTS];
+        int textureSlots[MAX_TEXTURE_SLOTS];
         std::vector<Font*> usedFonts;
         unsigned int boundTexturesCount;
         unsigned int loadedQuads;
-        int textureSlots[MAX_TEXTURE_SLOTS];
 
         ShaderProgram rendererShader;
 
