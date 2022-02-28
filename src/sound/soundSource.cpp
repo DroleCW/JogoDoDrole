@@ -47,3 +47,17 @@ void SoundSource::clear(){
 
     delete[] deletedBuffers;
 }
+
+void SoundSource::setPosition(const vec2f& pos){
+    alSource3f(soundSourceName, AL_POSITION, pos.x, pos.y, 0);
+}
+void SoundSource::setVelocity(const vec2f& vel){
+    alSource3f(soundSourceName, AL_VELOCITY, vel.x, vel.y, 0);
+}
+void SoundSource::setLooping(bool looping){
+    alSourcei(soundSourceName, AL_LOOPING, looping);
+}
+
+void SoundSource::setReferenceDistance(float distance){
+    alSourcef(soundSourceName, AL_REFERENCE_DISTANCE, distance);
+}

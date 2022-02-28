@@ -18,7 +18,7 @@ Quad::~Quad(){
 }
 
 void Quad::setPosition(const vec2f& pos){
-    vec2f size = vertices[3].position - vertices[0].position;
+    vec2f size = vertices[2].position - vertices[0].position;
 
     vertices[0].position = pos;
     vertices[1].position = {pos.x + size.x, pos.y};

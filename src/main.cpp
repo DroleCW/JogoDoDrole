@@ -49,6 +49,7 @@ int main(){
     testSprite.setLayer(1);
 
     Image testImage(TEST_TEXTURE3_LOCATION, {80.0f, 80.0f}, {180.0f, 220.0f});
+    vec2f testImagePos(300.0f, 300.0f);
     testImage.setPosition({300.0f, 300.0f});
     testImage.setSize({100.0f, 100.0f});
     testImage.setColor({0.0f, 1.0f, 1.0f, 1.0f});
@@ -59,9 +60,11 @@ int main(){
     SoundManager::loadSound(TEST_SOUND2_LOCATION);
     SoundSource testSoundSource1;
     SoundSource testSoundSource2;
+    SoundManager::setListenerPosition({SCR_WIDTH/2.0f, SCR_HEIGHT/2.0f}, SCR_WIDTH/2.0f);
     testSoundSource1.queueSound(TEST_SOUND1_LOCATION);
     testSoundSource1.play();
     testSoundSource2.attachSound(TEST_SOUND2_LOCATION);
+    testSoundSource2.setReferenceDistance(SCR_WIDTH/2.0f);
 
     short i = 0;
     // render loop
@@ -74,20 +77,22 @@ int main(){
         }
 
         if(InputManager::isKeyPressed(Keys::D)){
-            testImage.move({2.0f, 0.0f});
+            testImagePos += {2.0f, 0.0f};
         }
         if(InputManager::isKeyPressed(Keys::W)){
-            testImage.move({0.0f, -2.0f});
+            testImagePos += {0.0f, -2.0f};
         }
         if(InputManager::isKeyPressed(Keys::A)){
-            testImage.move({-2.0f, 0.0f});
+            testImagePos += {-2.0f, 0.0f};
         }
         if(InputManager::isKeyPressed(Keys::S)){
-            testImage.move({0.0f, 2.0f});
+            testImagePos += {0.0f, 2.0f};
         }
         if(InputManager::wasKeyPressed(Keys::G)){           
             testSoundSource2.play();
         }
+        testImage.setPosition(testImagePos);
+        testSoundSource2.setPosition(testImagePos);
 
         testRenderer.clear();
         testRenderer.renderQuad(testSprite);

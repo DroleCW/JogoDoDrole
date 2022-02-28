@@ -28,6 +28,14 @@ class SoundManager{
         static void queueBuffer(unsigned int soundSourceName, SoundLocation soundIndex);
         static void attachBuffer(unsigned int soundSourceName, SoundLocation soundIndex);
 
+        inline static void setListenerPosition(const vec2f& pos, float depth){
+            alListener3f(AL_POSITION, pos.x, pos.y, depth);
+        }
+
+        inline static void setListenerVelocity(const vec2f& vel){
+            alListener3f(AL_VELOCITY, vel.x, vel.y, 0);
+        }
+
 
     private:
 
