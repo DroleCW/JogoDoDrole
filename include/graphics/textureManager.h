@@ -10,21 +10,25 @@
 
 class TextureManager{
     private:
-        Texture* loadedTextures[NUMBER_OF_TEXTURES];
-        char* texturePaths[NUMBER_OF_TEXTURES];
-        int totalLoadedTextures;
-    public:
+        static Texture* loadedTextures[NUMBER_OF_TEXTURES];
+        static char* texturePaths[NUMBER_OF_TEXTURES];
+        static int totalLoadedTextures;
+
         TextureManager();
         ~TextureManager();
+    public:
+        
+        static void init();
+        static void terminate();
 
-        bool loadTexture(TextureLocation textureIndex);
-        void unloadTexture(TextureLocation textureIndex);
-        void bindTexture(TextureLocation textureIndex, int slot);
-        Texture* getTexture(TextureLocation textureIndex);
+        static bool loadTexture(TextureLocation textureIndex);
+        static void unloadTexture(TextureLocation textureIndex);
+        static void bindTexture(TextureLocation textureIndex, int slot);
+        static Texture* getTexture(TextureLocation textureIndex);
 
-        bool loadTexturePaths(const char* indicesFilePath);
+        static bool loadTexturePaths(const char* indicesFilePath);
 
-        inline int getLoadedTextures() const{
+        static inline int getLoadedTextures(){
             return totalLoadedTextures;
         }
 

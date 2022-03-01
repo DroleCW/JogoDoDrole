@@ -1,4 +1,5 @@
 #include "graphics/text/text.h"
+#include "graphics/graphicManager.h"
 
 Text::Text(){
     pos = {0, 0};
@@ -7,10 +8,12 @@ Text::Text(){
     font = nullptr;
     lineSpacing = 0;
     layer = 0;
+    GraphicManager::addText(this);
 }
 
 Text::~Text(){
     characters.clear();
+    GraphicManager::removeText(this);
 }
 
 void Text::setText(const std::string& text){
@@ -30,7 +33,7 @@ void Text::appendText(const std::string& text){
                     continue;
                 }
 
-                characters.emplace_back(NO_TEXTURE_LOCATION, font->getCharPosition(*i), font->getCharSize(*i));
+                characters.emplace_back(NO_TEXTURE_LOCATION, font->getCharPosition(*i), font->getCharSize(*i), false);
                 characters.back().setPosition(pos+cursor+font->getCharBearing(*i));
                 characters.back().setSize(font->getCharSize(*i));
                 characters.back().setColor(color);

@@ -1,7 +1,12 @@
 #include "graphics/text/fontManager.h"
 #include <fstream>
-        
-FontManager::FontManager(){
+
+FT_Library FontManager::library;
+FT_Face FontManager::loadedFaces[NUMBER_OF_FONTS];
+std::unordered_map<int, Font*> FontManager::loadedFonts[NUMBER_OF_FONTS];
+char* FontManager::fontPaths[NUMBER_OF_FONTS];
+
+void FontManager::init(){
 
     for(int i = 1; i < NUMBER_OF_FONTS; i++)
         loadedFaces[i] = nullptr;
@@ -10,7 +15,8 @@ FontManager::FontManager(){
 
     FT_Init_FreeType(&library);
 }
-FontManager::~FontManager(){
+
+void FontManager::terminate(){
 
     for(int i = 1; i < NUMBER_OF_FONTS; i++)
         if(loadedFaces[i])
@@ -21,6 +27,12 @@ FontManager::~FontManager(){
             delete[] fontPaths[i];
 
     FT_Done_FreeType(library);
+}
+
+FontManager::FontManager(){
+}
+
+FontManager::~FontManager(){
 }
 
 bool FontManager::loadFont(FontLocation fontIndex, int size){

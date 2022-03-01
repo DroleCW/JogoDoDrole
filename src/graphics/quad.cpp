@@ -1,7 +1,8 @@
 #include "graphics/quad.h"
 #include <stdio.h>
+#include "graphics/graphicManager.h"
 
-Quad::Quad(){
+Quad::Quad(bool autoIndex){
     for(int i = 0; i < 4; i++){
         vertices[i] = { 
                         {0.0f, 0.0f},//position
@@ -10,11 +11,13 @@ Quad::Quad(){
                         {0.0f, 0.0f}//texture coordinates
                       };
     }
+    if(autoIndex)
+        GraphicManager::addQuad(this);
 }
 
 
 Quad::~Quad(){
-    
+    GraphicManager::removeQuad(this);
 }
 
 void Quad::setPosition(const vec2f& pos){

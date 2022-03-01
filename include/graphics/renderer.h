@@ -31,21 +31,17 @@ class Renderer{
 
         ShaderProgram rendererShader;
 
-        View rendererView;
-
-        TextureManager* pTextureManager;
-        
+        View rendererView;    
 
     public:
-        Renderer(TextureManager* pTextureManager = nullptr, const View& view = {{0.0f, 0.0f}, {0.0f, 0.0f}, {-1.0f, 1.0f}, {2.0f, 2.0f}});
+        Renderer(const View& view = {{0.0f, 0.0f}, {0.0f, 0.0f}, {-1.0f, 1.0f}, {2.0f, 2.0f}});
         ~Renderer();
 
         void clear();
-        void renderQuad(const Quad& quad);
-        void renderText(Text& quad);
+        void renderQuad(const Quad* quad);
+        void renderText(Text* quad);
         void render();
 
-        inline void setRenderer(TextureManager* textureManager) {pTextureManager = textureManager;}
         inline void setView(const View& view) {rendererView = view;}
 
         

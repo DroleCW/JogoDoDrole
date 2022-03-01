@@ -3,9 +3,8 @@
 #include <glad/glad.h>
 #include <cstring>
 
-Renderer::Renderer(TextureManager* pTextureManager, const View& view):rendererShader(), rendererView(view){
+Renderer::Renderer(const View& view):rendererShader(), rendererView(view){
 
-    this->pTextureManager = pTextureManager;
     boundTexturesCount = 0;
    
 
@@ -66,20 +65,20 @@ void Renderer::clear(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  
 }
 
-void Renderer::renderQuad(const Quad& quad){
+void Renderer::renderQuad(const Quad* quad){
 
     unsigned int textureIndex;
-    for(textureIndex = 0; textureIndex < boundTexturesCount && boundTextures[textureIndex] != quad.getTexture(); textureIndex++);
+    for(textureIndex = 0; textureIndex < boundTexturesCount && boundTextures[textureIndex] != quad->getTexture(); textureIndex++);
 
     if(textureIndex < MAX_TEXTURE_SLOTS && loadedQuads < MAX_QUADS_PER_DRAW){
         float renderData[40];
-        memcpy(renderData, quad.getDataf(), sizeof(Vertex));
+        memcpy(renderData, quad->getDataf(), sizeof(Vertex));
         renderData[9] = (float)textureIndex;
-        memcpy(renderData+10, quad.getDataf()+9, sizeof(Vertex));
+        memcpy(renderData+10, quad->getDataf()+9, sizeof(Vertex));
         renderData[19] = (float)textureIndex;
-        memcpy(renderData+20, quad.getDataf()+18, sizeof(Vertex));
+        memcpy(renderData+20, quad->getDataf()+18, sizeof(Vertex));
         renderData[29] = (float)textureIndex;
-        memcpy(renderData+30, quad.getDataf()+27, sizeof(Vertex));
+        memcpy(renderData+30, quad->getDataf()+27, sizeof(Vertex));
         renderData[39] = (float)textureIndex;
 
         glBindBuffer(GL_ARRAY_BUFFER, rendererVertexBuffer);
@@ -87,7 +86,7 @@ void Renderer::renderQuad(const Quad& quad){
     
         if(textureIndex == boundTexturesCount){
             boundTexturesCount++;
-            boundTextures[textureIndex] = quad.getTexture();
+            boundTextures[textureIndex] = quad->getTexture();
         }
 
         loadedQuads++;
@@ -99,19 +98,19 @@ void Renderer::renderQuad(const Quad& quad){
 
 }
 
-void Renderer::renderText(Text& text){
+void Renderer::renderText(Text* text){
 
     unsigned int fontIndex;
-    for(fontIndex = 0; fontIndex < usedFonts.size() && usedFonts[fontIndex] != text.getFont(); fontIndex++);
+    for(fontIndex = 0; fontIndex < usedFonts.size() && usedFonts[fontIndex] != text->getFont(); fontIndex++);
     if(fontIndex == usedFonts.size())
-        usedFonts.push_back(text.getFont());
+        usedFonts.push_back(text->getFont());
 
     unsigned int textureIndex;
     for(textureIndex = 0; textureIndex < boundTexturesCount && boundTextures[textureIndex] != NUMBER_OF_TEXTURES + fontIndex; textureIndex++);
 
-    if(textureIndex < MAX_TEXTURE_SLOTS && loadedQuads + text.getContentSize() < MAX_QUADS_PER_DRAW){
-        text.resetIterator();
-        for(Image* quad = text.getNextCharacter(); quad != nullptr; quad = text.getNextCharacter()){
+    if(textureIndex < MAX_TEXTURE_SLOTS && loadedQuads + text->getContentSize() < MAX_QUADS_PER_DRAW){
+        text->resetIterator();
+        for(Image* quad = text->getNextCharacter(); quad != nullptr; quad = text->getNextCharacter()){
             float renderData[40];
             memcpy(renderData, quad->getDataf(), sizeof(Vertex));
             renderData[9] = (float)textureIndex;
@@ -152,16 +151,16 @@ void Renderer::render(){
     rendererShader.setUniform("textureSampler", textureSlots, boundTexturesCount);
 
     for(unsigned int i = 0; i < boundTexturesCount; i++){
-        if(boundTextures[i] >= NUMBER_OF_TEXTURES){
+        if(boundTextures[i] >= NUMBER_OF_TEXTURES){//if the texture ID is out of bounds, its a font atlas.
             usedFonts[boundTextures[i]-NUMBER_OF_TEXTURES]->getTexture()->bind(i);
         }
         else{
-            pTextureManager->bindTexture(boundTextures[i], i);
+            TextureManager::bindTexture(boundTextures[i], i);
         }
     }
     glDrawElements(GL_TRIANGLES, 6*loadedQuads, GL_UNSIGNED_INT, 0);
 
-    if(boundTexturesCount == MAX_TEXTURE_SLOTS || pTextureManager->getLoadedTextures() > MAX_TEXTURE_SLOTS){
+    if(boundTexturesCount == MAX_TEXTURE_SLOTS || TextureManager::getLoadedTextures() > MAX_TEXTURE_SLOTS){
         boundTexturesCount = 0;
         usedFonts.clear();
     }

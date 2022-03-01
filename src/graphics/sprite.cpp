@@ -1,7 +1,7 @@
 #include "graphics/sprite.h"
 #include <stdio.h>
 
-Sprite::Sprite(TextureLocation texture){
+Sprite::Sprite(TextureLocation texture, bool autoIndex): Quad(autoIndex){
     setTexture(texture);
 }
 

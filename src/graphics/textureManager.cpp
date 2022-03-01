@@ -1,6 +1,10 @@
 #include "graphics/textureManager.h"
 
-TextureManager::TextureManager(){
+Texture* TextureManager::loadedTextures[NUMBER_OF_TEXTURES] = {};
+char* TextureManager::texturePaths[NUMBER_OF_TEXTURES] = {};
+int TextureManager::totalLoadedTextures = 0;
+
+void TextureManager::init(){
     for(int i = 1; i < NUMBER_OF_TEXTURES; i++)
         loadedTextures[i] = nullptr;
 
@@ -10,7 +14,7 @@ TextureManager::TextureManager(){
 
 }
 
-TextureManager::~TextureManager(){
+void TextureManager::terminate(){
     
 
     for(int i = 1; i < NUMBER_OF_TEXTURES; i++)
@@ -20,6 +24,14 @@ TextureManager::~TextureManager(){
     for(int i = 1; i < NUMBER_OF_TEXTURES; i++)
         if(texturePaths[i])
             delete[] texturePaths[i];
+
+}
+
+TextureManager::TextureManager(){
+
+}
+
+TextureManager::~TextureManager(){
 
 }
 

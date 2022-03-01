@@ -1,6 +1,6 @@
 #include "graphics/image.h"
 
-Image::Image(TextureLocation texture){
+Image::Image(TextureLocation texture, bool autoIndex): Quad(autoIndex){
 
     setTexturePosition({0.0f, 0.0f});
     setTextureSize({0.0f, 0.0f});
@@ -11,7 +11,7 @@ Image::Image(TextureLocation texture){
     setTexture(texture);
 }
 
-Image::Image(TextureLocation texture, const vec2f& offset, const vec2f& totalSize){
+Image::Image(TextureLocation texture, const vec2f& offset, const vec2f& totalSize, bool autoIndex): Quad(autoIndex){
     setTexturePosition(offset);
     setTextureSize(totalSize);
 

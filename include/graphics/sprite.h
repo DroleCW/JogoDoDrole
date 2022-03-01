@@ -13,7 +13,7 @@ class Sprite: public Quad{
         short columns;
 
     public:
-        Sprite(TextureLocation texture = NO_TEXTURE_LOCATION);
+        Sprite(TextureLocation texture = NO_TEXTURE_LOCATION, bool autoIndex = true);
         Sprite(TextureLocation texture, const vec2f& offset, const vec2f& totalSize, const vec2f& quadSize);
         Sprite(TextureLocation texture, const vec2f& offset, const vec2f& totalSize, short lines, short columns);
         ~Sprite();

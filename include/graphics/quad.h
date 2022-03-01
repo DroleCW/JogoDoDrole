@@ -16,7 +16,7 @@ class Quad{
         Vertex vertices[4];
 
     public:
-        Quad();
+        Quad(bool autoIndex = true);
         ~Quad();
 
         void setPosition(const vec2f& pos);
