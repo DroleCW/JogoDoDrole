@@ -1,6 +1,6 @@
 #pragma once
 
-#include <GLFW/glfw3.h>
+#include "graphics/graphicManager.h"
 
 //keyboard enum, maps from glfw
 enum Keys{
@@ -143,7 +143,7 @@ class InputManager{
         static bool isKeyPressed(Keys key);
 
         static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-        static void pollEvents(GLFWwindow* hindowHandle);
+        static void pollEvents();
 };
 
 //void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);

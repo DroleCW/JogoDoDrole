@@ -25,7 +25,11 @@ class Quad{
         void scale(float scalar);
         void setWidth(float width);
         void setHeight(float height);
-        void setLayer(float layer);
+        void setLayer(int layer);
+
+        inline int getLayer() const{
+            return (int)vertices[0].layer;
+        }
 
         void setTexturePosition(const vec2f& pos);
         void moveTexture(const vec2f& delta);

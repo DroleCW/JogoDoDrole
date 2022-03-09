@@ -1,6 +1,7 @@
 #include "graphics/textureManager.h"
 
 Texture* TextureManager::loadedTextures[NUMBER_OF_TEXTURES] = {};
+std::unordered_map<int, Texture*> TextureManager::atlas;
 char* TextureManager::texturePaths[NUMBER_OF_TEXTURES] = {};
 int TextureManager::totalLoadedTextures = 0;
 
@@ -61,11 +62,32 @@ void TextureManager::unloadTexture(TextureLocation textureIndex){
     }
 }
 
+int TextureManager::addAtlas(Texture* atlasTexture){
+    int index = NUMBER_OF_TEXTURES;
+    for(index; atlas.count(index) != 0; index++);
+
+    atlas.insert({index, atlasTexture});
+    return index;
+}
+
+void TextureManager::removeAtlas(int atlasIndex){
+    atlas.erase(atlasIndex);
+}
+
+Texture* TextureManager::getAtlas(int atlasIndex){
+    return atlas[atlasIndex];
+}
+
 void TextureManager::bindTexture(TextureLocation textureIndex, int slot){
-    loadedTextures[textureIndex]->bind(slot); 
+    if(textureIndex >= NUMBER_OF_TEXTURES)
+        atlas[textureIndex]->bind(slot);
+    else
+        loadedTextures[textureIndex]->bind(slot); 
 }
 
 Texture* TextureManager::getTexture(TextureLocation textureIndex){
+    if(textureIndex >= NUMBER_OF_TEXTURES)
+        return atlas[textureIndex];
     return loadedTextures[textureIndex];
 }
 

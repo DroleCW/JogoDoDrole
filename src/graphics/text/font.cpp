@@ -2,9 +2,11 @@
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "graphics/imageLoader/stb_image_write.h"
+#include "graphics/textureManager.h"
 
 Font::Font(FT_Face face, int size): atlasTexture(){
     atlas = nullptr;
+    atlasIndex = 0;
     this->face = face;
     this->size = size;
     generateAtlas();
@@ -32,8 +34,10 @@ float Font::getCharAdvance(char c){
 
 void Font::generateAtlas(){
 
-    if(atlas)
+    if(atlas){
         delete[] atlas;
+        TextureManager::removeAtlas(atlasIndex);
+    }
 
     FT_Set_Pixel_Sizes(face, size, size);
 
@@ -69,4 +73,6 @@ void Font::generateAtlas(){
     atlasTexture.setHeight(h);
     atlasTexture.setWidth(w);
     atlasTexture.setChannels(4);
+
+    atlasIndex = TextureManager::addAtlas(&atlasTexture);
 }

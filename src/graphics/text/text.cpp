@@ -27,18 +27,19 @@ void Text::appendText(const std::string& text){
     content += text;
     if(font){
         for(auto i = text.begin(); i != text.end(); i++){
-                if((*i) == '\n'){
-                    cursor.y += lineSpacing;
-                    cursor.x = 0.0f;
-                    continue;
-                }
+            if((*i) == '\n'){
+                cursor.y += lineSpacing;
+                cursor.x = 0.0f;
+                continue;
+            }
 
-                characters.emplace_back(NO_TEXTURE_LOCATION, font->getCharPosition(*i), font->getCharSize(*i), false);
-                characters.back().setPosition(pos+cursor+font->getCharBearing(*i));
-                characters.back().setSize(font->getCharSize(*i));
-                characters.back().setColor(color);
-                characters.back().setLayer(layer);
-                cursor.x += font->getCharAdvance(*i);
+            characters.emplace_back(NO_TEXTURE_LOCATION, font->getCharPosition(*i), font->getCharSize(*i), false);
+            characters.back().setPosition(pos+cursor+font->getCharBearing(*i));
+            characters.back().setSize(font->getCharSize(*i));
+            characters.back().setColor(color);
+            characters.back().setLayer(layer);
+            characters.back().setTexture((TextureLocation)font->getAtlasIndex());
+            cursor.x += font->getCharAdvance(*i);
         }
     }
 }
@@ -50,7 +51,7 @@ void Text::setFont(Font* font){
 }
 
 Image* Text::getNextCharacter(){
-    if(index >= content.size())
+    if(index >= characters.size())
         return nullptr;
     return &characters[index++];
 }

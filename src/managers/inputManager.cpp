@@ -25,7 +25,8 @@ bool InputManager::isKeyPressed(Keys key){
     return heldKeys[key];
 }
 
-void InputManager::pollEvents(GLFWwindow* hindowHandle){
+void InputManager::pollEvents(){
+    
     for(int i = 0; i < Keys::NumberOfKeys; i++){
         pressedKeys[i] = false;
         releasedKeys[i] = false;

@@ -13,6 +13,7 @@ Quad::Quad(bool autoIndex){
     }
     if(autoIndex)
         GraphicManager::addQuad(this);
+    
 }
 
 
@@ -58,8 +59,7 @@ void Quad::setHeight(float height){
     vertices[3].position.y = vertices[0].position.y + height;
 }
 
-void Quad::setLayer(float layer){
-    layer = (layer - 50)/50;
+void Quad::setLayer(int layer){
     vertices[0].layer = layer;
     vertices[1].layer = layer;
     vertices[2].layer = layer;

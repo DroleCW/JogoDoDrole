@@ -2,13 +2,17 @@
 #include "graphics/renderer.h"
 #include "graphics/quad.h"
 #include "graphics/text/text.h"
+#include "graphics/window.h"
+#include "graphics/particles/particleSystem.h"
 #include <set>
 
 class GraphicManager{
     private:
         static Renderer* pQuadRenderer;
+        static Window* pWindow;
         static std::set<Quad*> quads;
         static std::set<Text*> texts;
+        static std::set<ParticleSystem*> particleSystems;
 
         GraphicManager();
         ~GraphicManager();
@@ -16,6 +20,17 @@ class GraphicManager{
     public:
         static void init();
         static void terminate();
+
+        static void openWindow(int width, int height, const char* name);
+        inline static Window* getWindowHandle(){
+            return pWindow;
+        }
+        inline static bool getWindowShouldClose(){
+           return pWindow->getShouldClose();
+        }
+        inline static void setWindowShouldClose(){
+            pWindow->setShouldClose();
+        }
 
         inline static void setView(const View& view){
             pQuadRenderer->setView(view);
@@ -25,6 +40,8 @@ class GraphicManager{
         static void removeQuad(Quad* quad);
         static void addText(Text* text);
         static void removeText(Text* text);
+        static void addParticleSystem(ParticleSystem* particleSystem);
+        static void removeParticleSystem(ParticleSystem* particleSystem);
         static void clear();
         static void render();
 };

@@ -61,12 +61,11 @@ void Window::initOpenGL(){
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
     glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_DEPTH_TEST);
+    //glEnable(GL_DEPTH_TEST);
 }
 
 void Window::refresh(){
     glfwSwapBuffers(windowHandle);
-    InputManager::pollEvents(windowHandle);
 }
 
 bool Window::getShouldClose(){

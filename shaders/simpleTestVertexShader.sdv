@@ -13,7 +13,7 @@ uniform vec2 screenTranslation;
 uniform vec2 scale;
 
 void main(){
-    gl_Position = vec4((aPos.x - worldTranslation.x)*scale.x + screenTranslation.x, -1*(aPos.y-worldTranslation.y)*scale.y + screenTranslation.y, aPos.z, 1.0);
+    gl_Position = vec4((aPos.x - worldTranslation.x)*scale.x + screenTranslation.x, -1*(aPos.y-worldTranslation.y)*scale.y + screenTranslation.y, (aPos.z-50)/50, 1.0);
 
     color = aColor;
 

@@ -42,5 +42,6 @@ void main(){
         FragColor = texture(textureSampler[14], textCoord)*color;
     else if(textureSlot == 15)
         FragColor = texture(textureSampler[14], textCoord)*color;
+
 }
 

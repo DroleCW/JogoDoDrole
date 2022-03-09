@@ -14,6 +14,7 @@ class Font{
         int size;
         unsigned char* atlas;
         Texture atlasTexture;
+        int atlasIndex;
 
         vec2f charPositions[127-32];
         vec2f charSizes[127-32];
@@ -29,8 +30,8 @@ class Font{
         vec2f getCharBearing(char c);
         float getCharAdvance(char c);
 
-        inline const Texture* getTexture() const{
-            return &atlasTexture;
+        inline int getAtlasIndex(){
+            return atlasIndex;
         }
 
     private:

@@ -6,7 +6,6 @@
 #include "math/vec2f.h"
 #include "graphics/sprite.h"
 #include "graphics/image.h"
-#include "graphics/window.h"
 #include "managers/inputManager.h"
 #include "graphics/text/fontManager.h"
 #include "graphics/text/text.h"
@@ -20,15 +19,15 @@ const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
 int main(){
-
-    Window mainWindow(SCR_WIDTH, SCR_HEIGHT, "abstracted window");
-
+    printf("main\n");
     //initializing static managers
+    GraphicManager::openWindow(SCR_WIDTH, SCR_HEIGHT, "abstracted window");
     TextureManager::init();
     GraphicManager::init();
     FontManager::init();
     SoundManager::init();
 
+    
     
     FontManager::loadFont(TEST_FONT1_LOCATION, 50);
 
@@ -36,18 +35,19 @@ int main(){
     Text testText;
     testText.setFont(FontManager::getFont(TEST_FONT1_LOCATION, 50));
     testText.setLineSpacing(50);
-    testText.setText("Drole\nDrile");
+    testText.setText("DroleDrile");
     testText.appendText("\nDrule");
     testText.setPosition({10.0f, 50.0f});
     testText.setColor({1.0f, 0.1f, 0.1f, 1.0f});
-    testText.setLayer(2);
+    testText.setLayer(8);
 
-    //creating a renderer with a view to the whole screen
+    //setting a view to the whole screen
     View testView({0.0f, 0.0f}, {800.0f, 600.0f}, {-1.0f, 1.0f}, {2.0f, 2.0f});
     GraphicManager::setView(testView);
 
     TextureManager::loadTexture(TEST_TEXTURE2_LOCATION);
     TextureManager::loadTexture(TEST_TEXTURE3_LOCATION);
+    TextureManager::loadTexture(TEST_TEXTURE4_LOCATION);
 
     //making an animated sprite from a loaded texture
     Sprite testSprite(TEST_TEXTURE2_LOCATION);
@@ -55,7 +55,7 @@ int main(){
     testSprite.setSize({67.0f, 62.0f});
     testSprite.setColor({1.0f, 1.0f, 1.0f, 1.0f});
     testSprite.generateQuads({0.0f, 0.0f}, {201.0f, 251.0f}, 4, 3);
-    testSprite.setLayer(1);//lower layers are rendered in front, the sprite will cover part of the test text
+    testSprite.setLayer(5);
 
     //making a still image from a loaded texture
     Image testImage(TEST_TEXTURE3_LOCATION, {80.0f, 80.0f}, {180.0f, 220.0f});
@@ -63,7 +63,18 @@ int main(){
     testImage.setPosition({300.0f, 300.0f});
     testImage.setSize({100.0f, 100.0f});
     testImage.setColor({0.0f, 1.0f, 1.0f, 1.0f});
-    testImage.setLayer(3);
+    testImage.setLayer(30);
+
+    ParticleSystem testParticleSystem;
+    testParticleSystem.setTexture(TEST_TEXTURE4_LOCATION);
+    testParticleSystem.setTexturePosition({0.0f, 0.0f});
+    testParticleSystem.setTextureSize({801.0f, 598.0f});
+    testParticleSystem.setPosition({300.0f, 300.0f});
+    testParticleSystem.setPositionRange({0.0f, 0.0f}, {0.0f, 0.0f});
+    testParticleSystem.setVelocityRange({-100.0f, -100.0f}, {100.0f, 100.0f});
+    testParticleSystem.setParticleSize({50.0f, 50.0f});
+    testParticleSystem.setLifetimeRange(3, 4);
+    testParticleSystem.setLayer(10);
 
     
     SoundManager::loadSound(TEST_SOUND1_LOCATION);
@@ -86,13 +97,15 @@ int main(){
     short i = 0;
     // render loop
     // -----------
-    while (!mainWindow.getShouldClose()){
+    while (!GraphicManager::getWindowShouldClose()){
         i++;
         if(i > 60){
             i = 0;
             testSprite.nextQuad();
+            testParticleSystem.emit();
         }
 
+        testParticleSystem.update(0.01);
         //WASD will update the position of the test image
         if(InputManager::isKeyPressed(Keys::D)){
             testImagePos += {2.0f, 0.0f};
@@ -114,12 +127,11 @@ int main(){
         testImage.setPosition(testImagePos);
         testSoundSource2.setPosition(testImagePos);
 
-        GraphicManager::clear();
         GraphicManager::render();
         
         // swap buffers and poll IO events
         // -------------------------------------------------------------------------------
-        mainWindow.refresh();
+        InputManager::pollEvents();
 
     }
 
@@ -135,6 +147,7 @@ int main(){
     //unloading textures
     TextureManager::unloadTexture(TEST_TEXTURE2_LOCATION);
     TextureManager::unloadTexture(TEST_TEXTURE3_LOCATION);
+    TextureManager::unloadTexture(TEST_TEXTURE4_LOCATION);
 
     //terminating managers
     SoundManager::terminate();//because the sources are in the stack and persist until the return, this will cause errors. It will not happen in a real situation.
