@@ -6,6 +6,7 @@ class Particle: public Image{
     private:
         vec2f velocity;
         float lifetime;
+        float scalingFactor;
         bool isAlive;
 
     public:
@@ -19,6 +20,10 @@ class Particle: public Image{
         inline void setLifetime(float lifetime){
             isAlive = true;
             this->lifetime = lifetime;
+        }
+
+        inline void setScalingFactor(float scalingFactor){
+            this->scalingFactor = scalingFactor;
         }
 
         inline bool getIsAlive(){

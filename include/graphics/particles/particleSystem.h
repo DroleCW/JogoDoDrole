@@ -14,6 +14,9 @@ class ParticleSystem{
         vec2f lowPositionLimit, highPositionLimit;
         vec2f lowVelocityLimit, highVelocityLimit;
 
+        vec2f lowSizeLimit, highSizeLimit;
+        bool keepSizeRatio;
+
         float lowLifetime, highLifetime;
 
         Particle* particles;
@@ -50,6 +53,14 @@ class ParticleSystem{
             lowVelocityLimit = lowerLimit;
             highVelocityLimit = higherLimit;
         }
+
+        inline void setSizeRange(vec2f lowerLimit, vec2f higherLimit, bool keepRatio){
+            keepSizeRatio = keepRatio;
+            lowSizeLimit = lowerLimit;
+            highSizeLimit = higherLimit;
+        }
+
+        void setScalingFactor(float scalingFactor);
 
         inline void setLifetimeRange(float lowerLimit, float higherLimit){
             lowLifetime = lowerLimit;

@@ -133,6 +133,7 @@ class InputManager{
         static bool pressedKeys[Keys::NumberOfKeys];
         static bool heldKeys[Keys::NumberOfKeys];
         static bool releasedKeys[Keys::NumberOfKeys];
+        static vec2f mousePos;
 
         InputManager();
         ~InputManager();
@@ -141,6 +142,9 @@ class InputManager{
         static bool wasKeyPressed(Keys key);
         static bool wasKeyReleased(Keys key);
         static bool isKeyPressed(Keys key);
+
+        static vec2f getMousePosScreen();//mouse position on screen (NDC)
+        static vec2f getMousePosWorld(const View& view);//undoes the view transform and returns the position the cursor would have in the world
 
         static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
         static void pollEvents();

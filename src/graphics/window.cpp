@@ -2,21 +2,18 @@
 #include "managers/inputManager.h"
 #include <iostream>
 
-Window::Window(){
-    windowHandle = nullptr;
-    
-}
+GLFWwindow* Window::windowHandle = nullptr;
+unsigned int Window::windowWidth, Window::windowHeight;
+unsigned int Window:: displayWidth, Window::displayHeight;
 
-Window::Window(unsigned int screenWidth, unsigned int screenHeight, const char* name){
-    windowHandle = nullptr;
-    createWindow(screenWidth, screenHeight, name);
-
-}
 
 void Window::createWindow(unsigned int screenWidth, unsigned int screenHeight, const char* name){
 
-    width = screenWidth;
-    height = screenHeight;
+    windowWidth = screenWidth;
+    windowHeight = screenHeight;
+
+    displayWidth = screenWidth;
+    displayHeight = screenHeight;
 
     if(windowHandle)
         glfwTerminate();
@@ -31,7 +28,7 @@ void Window::createWindow(unsigned int screenWidth, unsigned int screenHeight, c
     #endif
 
     windowHandle = nullptr;
-    windowHandle = glfwCreateWindow(width, height, name, NULL, NULL);
+    windowHandle = glfwCreateWindow(windowWidth, windowHeight, name, NULL, NULL);
     if (windowHandle == nullptr){
         std::cout << "Failed to create GLFW window" << std::endl;
         return;
@@ -82,5 +79,7 @@ void Window::framebuffer_size_callback(GLFWwindow* window, int width, int height
     printf("size callback\n");
     // make sure the viewport matches the new window dimensions; note that width and 
     // height will be significantly larger than specified on retina displays.
+    windowWidth = width;
+    windowHeight = height;
     glViewport(0, 0, width, height);
 }

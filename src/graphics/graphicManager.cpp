@@ -1,7 +1,6 @@
 #include "graphics/graphicManager.h"
 
 Renderer* GraphicManager::pQuadRenderer = nullptr;
-Window* GraphicManager::pWindow = nullptr;
 std::set<Quad*> GraphicManager::quads;
 std::set<Text*> GraphicManager::texts;
 std::set<ParticleSystem*> GraphicManager::particleSystems;
@@ -15,7 +14,7 @@ void GraphicManager::terminate(){
 }
 
 void GraphicManager::openWindow(int width, int height, const char* name){
-    pWindow = new Window(width, height, name);
+    Window::createWindow(width, height, name);
 }
 
 GraphicManager::GraphicManager(){
@@ -68,5 +67,5 @@ void GraphicManager::render(){
     
     pQuadRenderer->render();
 
-    pWindow->refresh();
+    Window::refresh();
 }

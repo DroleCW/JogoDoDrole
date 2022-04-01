@@ -11,22 +11,30 @@
 class Window{
 
     private:
-        GLFWwindow* windowHandle;
-        unsigned int width, height;
+        static GLFWwindow* windowHandle;
+        static unsigned int windowWidth, windowHeight;
+        static unsigned int displayWidth, displayHeight;
 
-    public:
         Window();
-        Window(unsigned int screenWidth, unsigned int screenHeight, const char* name);
         ~Window();
 
-        void createWindow(unsigned int screenWidth, unsigned int screenHeight, const char* name);
-        void refresh();
-        bool getShouldClose();
-        void setShouldClose();
+    public:
+        
+
+        static void createWindow(unsigned int screenWidth, unsigned int screenHeight, const char* name);
+        static void refresh();
+        static bool getShouldClose();
+        static void setShouldClose();
 
         static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
         
         static void initOpenGL();
 
+        inline static GLFWwindow* getWindowHandle(){return windowHandle;}
+
+        inline static unsigned int getWindowWidth(){return windowWidth;}
+        inline static unsigned int getWindowHeight(){return windowHeight;}
+        inline static unsigned int getDisplayWidth(){return displayWidth;}
+        inline static unsigned int getDisplayHeight(){return displayHeight;}
 };
 

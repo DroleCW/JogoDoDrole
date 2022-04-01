@@ -9,6 +9,7 @@ ParticleSystem::ParticleSystem():position({0.0f, 0.0f}), velocity({0.0f, 0.0f}),
 texture(NO_TEXTURE_LOCATION),
 lowPositionLimit(0, 0), highPositionLimit(0, 0),
 lowVelocityLimit(0, 0), highVelocityLimit(0, 0),
+lowSizeLimit(0, 0), highSizeLimit(0, 0), keepSizeRatio(false),
 lowLifetime(0), highLifetime(1),
 insertionIt(0), it(0),
 livingParticles(0){
@@ -24,9 +25,7 @@ ParticleSystem::~ParticleSystem(){
 }
 
 void ParticleSystem::update(float dt){
-    for(int j = insertionIt-1, count = 0; j != insertionIt && count < livingParticles; j--){
-        if(j < 0)
-            j = MAX_LIVING_PARTICLES-1;
+    for(int j = 0, count = 0; j < MAX_LIVING_PARTICLES && count < livingParticles; j++){
         if(particles[j].getIsAlive()){
             if(!particles[j].update(dt))
                 livingParticles--;
@@ -49,7 +48,6 @@ void ParticleSystem::setTexturePosition(vec2f texturePosition){
 void ParticleSystem::setTextureSize(vec2f textureSize){
     for(int j = 0; j < MAX_LIVING_PARTICLES; j++){
         particles[j].setTextureSize(textureSize);
-        particles[j].setSize({100.0f, 100.0f});
     }
     
 }
@@ -66,12 +64,17 @@ void ParticleSystem::setLayer(int layer){
     }
 }
 
+void ParticleSystem::setScalingFactor(float scalingFactor){
+    for(int j = 0; j < MAX_LIVING_PARTICLES; j++){
+        particles[j].setScalingFactor(scalingFactor);
+    }
+}
+
 void ParticleSystem::emit(){
     if(livingParticles == MAX_LIVING_PARTICLES)
         return;
 
-    while(particles[insertionIt].getIsAlive()){//find a dead particle slot
-        insertionIt++;
+    while(particles[insertionIt++].getIsAlive()){//find a dead particle slot
         if(insertionIt >= MAX_LIVING_PARTICLES)
             insertionIt = 0;
     }
@@ -81,6 +84,9 @@ void ParticleSystem::emit(){
     particles[insertionIt].setPosition(newPosition);
     particles[insertionIt].setVelocity({RAND_0TO1_F*(highVelocityLimit.x-lowVelocityLimit.x) + lowVelocityLimit.x, RAND_0TO1_F*(highVelocityLimit.y-lowVelocityLimit.y) + lowVelocityLimit.y});
     particles[insertionIt].setLifetime(RAND_0TO1_F*(highLifetime - lowLifetime) + lowLifetime);
+
+    float scale = RAND_0TO1_F;
+    particles[insertionIt].setSize({scale*(highSizeLimit.x-lowSizeLimit.x) + lowSizeLimit.x, (keepSizeRatio ? scale : RAND_0TO1_F)*(highSizeLimit.y-lowSizeLimit.y) + lowSizeLimit.y});
 
     livingParticles++;
 }

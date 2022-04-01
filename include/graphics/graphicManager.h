@@ -9,7 +9,6 @@
 class GraphicManager{
     private:
         static Renderer* pQuadRenderer;
-        static Window* pWindow;
         static std::set<Quad*> quads;
         static std::set<Text*> texts;
         static std::set<ParticleSystem*> particleSystems;
@@ -22,14 +21,13 @@ class GraphicManager{
         static void terminate();
 
         static void openWindow(int width, int height, const char* name);
-        inline static Window* getWindowHandle(){
-            return pWindow;
-        }
+
         inline static bool getWindowShouldClose(){
-           return pWindow->getShouldClose();
+           return Window::getShouldClose();
         }
+
         inline static void setWindowShouldClose(){
-            pWindow->setShouldClose();
+            Window::setShouldClose();
         }
 
         inline static void setView(const View& view){

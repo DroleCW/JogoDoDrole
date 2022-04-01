@@ -42,12 +42,13 @@ int main(){
     testText.setLayer(8);
 
     //setting a view to the whole screen
-    View testView({0.0f, 0.0f}, {800.0f, 600.0f}, {-1.0f, 1.0f}, {2.0f, 2.0f});
+    View testView({0.0f, 0.0f}, {SCR_WIDTH, SCR_HEIGHT}, {-1.0f, 1.0f}, {2.0f, 2.0f});
     GraphicManager::setView(testView);
 
     TextureManager::loadTexture(TEST_TEXTURE2_LOCATION);
     TextureManager::loadTexture(TEST_TEXTURE3_LOCATION);
     TextureManager::loadTexture(TEST_TEXTURE4_LOCATION);
+    TextureManager::loadTexture(TEST_TEXTURE5_LOCATION);
 
     //making an animated sprite from a loaded texture
     Sprite testSprite(TEST_TEXTURE2_LOCATION);
@@ -65,6 +66,14 @@ int main(){
     testImage.setColor({0.0f, 1.0f, 1.0f, 1.0f});
     testImage.setLayer(30);
 
+    //making an image that will follow the cursor
+    Image testPointerImage(TEST_TEXTURE5_LOCATION, {0.0f, 0.0f}, {443.0f, 312.0f});
+    vec2f pointerDelta(-100.0f, 0.0f);
+    testPointerImage.setPosition({300.0f, 300.0f});
+    testPointerImage.setSize({100.0f, 100.0f});
+    testPointerImage.setColor({1.0f, 1.0f, 1.0f, 1.0f});
+    testPointerImage.setLayer(50);
+
     ParticleSystem testParticleSystem;
     testParticleSystem.setTexture(TEST_TEXTURE4_LOCATION);
     testParticleSystem.setTexturePosition({0.0f, 0.0f});
@@ -74,6 +83,8 @@ int main(){
     testParticleSystem.setVelocityRange({-100.0f, -100.0f}, {100.0f, 100.0f});
     testParticleSystem.setParticleSize({50.0f, 50.0f});
     testParticleSystem.setLifetimeRange(3, 4);
+    testParticleSystem.setSizeRange({100.0f, 100.0f,}, {200.0f, 200.0f}, true);
+    testParticleSystem.setScalingFactor(0.998f);
     testParticleSystem.setLayer(10);
 
     
@@ -97,6 +108,7 @@ int main(){
     short i = 0;
     // render loop
     // -----------
+    vec2f mouse;
     while (!GraphicManager::getWindowShouldClose()){
         i++;
         if(i > 60){
@@ -120,11 +132,13 @@ int main(){
             testImagePos += {0.0f, 2.0f};
         }
 
-        //G will play a sound roughly where the test image is
+        mouse = InputManager::getMousePosWorld(testView);
+        //'G' key will play a sound roughly where the test image is
         if(InputManager::wasKeyPressed(Keys::G)){           
             testSoundSource2.play();
         }
         testImage.setPosition(testImagePos);
+        testPointerImage.setPosition(mouse + pointerDelta);
         testSoundSource2.setPosition(testImagePos);
 
         GraphicManager::render();
@@ -148,6 +162,7 @@ int main(){
     TextureManager::unloadTexture(TEST_TEXTURE2_LOCATION);
     TextureManager::unloadTexture(TEST_TEXTURE3_LOCATION);
     TextureManager::unloadTexture(TEST_TEXTURE4_LOCATION);
+    TextureManager::unloadTexture(TEST_TEXTURE5_LOCATION);
 
     //terminating managers
     SoundManager::terminate();//because the sources are in the stack and persist until the return, this will cause errors. It will not happen in a real situation.

@@ -25,4 +25,6 @@ class View{
 
         inline vec2f getTargetPosition() const {return targetPosition;}
         inline vec2f getTargetSize() const {return targetSize;}
+
+        inline vec2f getScalingFactor() const {return {targetSize.x/sourceSize.x, targetSize.y/sourceSize.y};}
 };

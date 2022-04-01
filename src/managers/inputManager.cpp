@@ -4,6 +4,7 @@
 bool InputManager::pressedKeys[Keys::NumberOfKeys];
 bool InputManager::releasedKeys[Keys::NumberOfKeys];
 bool InputManager::heldKeys[Keys::NumberOfKeys];
+vec2f InputManager::mousePos;
 
 InputManager::InputManager(){
 
@@ -25,6 +26,18 @@ bool InputManager::isKeyPressed(Keys key){
     return heldKeys[key];
 }
 
+vec2f InputManager::getMousePosScreen(){
+    return mousePos;
+}
+
+vec2f InputManager::getMousePosWorld(const View& view){
+    vec2f pos = mousePos - view.getTargetPosition();
+    vec2f scalingFactor = view.getScalingFactor();
+    pos.x /= scalingFactor.x;
+    pos.y /= -scalingFactor.y; //world y grows downwards, NDC y grows upwards
+    return pos + view.getSourcePosition();
+}
+
 void InputManager::pollEvents(){
     
     for(int i = 0; i < Keys::NumberOfKeys; i++){
@@ -32,6 +45,9 @@ void InputManager::pollEvents(){
         releasedKeys[i] = false;
     }
     glfwPollEvents();
+    double mouseX, mouseY;
+    glfwGetCursorPos(Window::getWindowHandle(), &mouseX, &mouseY);
+    mousePos = {2*mouseX/Window::getWindowWidth()-1, -2*mouseY/Window::getWindowHeight()+1};
 }
 
 
