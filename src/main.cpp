@@ -11,6 +11,7 @@
 #include "graphics/text/text.h"
 #include "sound/soundManager.h"
 #include "graphics/graphicManager.h"
+#include "physics/collisionManager.h"
 
 #include <string>
 
@@ -57,6 +58,8 @@ int main(){
     testSprite.setColor({1.0f, 1.0f, 1.0f, 1.0f});
     testSprite.generateQuads({0.0f, 0.0f}, {201.0f, 251.0f}, 4, 3);
     testSprite.setLayer(5);
+    Collidable testSpriteHitbox(CollidableType::testSprite, {100.0f, 100.0f, 67.0f, 62.0f});
+    CollisionManager::addCollidable(&testSpriteHitbox);
 
     //making a still image from a loaded texture
     Image testImage(TEST_TEXTURE3_LOCATION, {80.0f, 80.0f}, {180.0f, 220.0f});
@@ -65,6 +68,8 @@ int main(){
     testImage.setSize({100.0f, 100.0f});
     testImage.setColor({0.0f, 1.0f, 1.0f, 1.0f});
     testImage.setLayer(30);
+    Collidable testImageHitbox(CollidableType::testImage, {300.0f, 300.0f, 100.0f, 100.0f});
+    CollisionManager::addCollidable(&testImageHitbox);
 
     //making an image that will follow the cursor
     Image testPointerImage(TEST_TEXTURE5_LOCATION, {0.0f, 0.0f}, {443.0f, 312.0f});
@@ -109,6 +114,7 @@ int main(){
     // render loop
     // -----------
     vec2f mouse;
+    vec2f imageVel;
     while (!GraphicManager::getWindowShouldClose()){
         i++;
         if(i > 60){
@@ -116,30 +122,46 @@ int main(){
             testSprite.nextQuad();
             testParticleSystem.emit();
         }
-
+        imageVel = {0.0f, 0.0f};
         testParticleSystem.update(0.01);
         //WASD will update the position of the test image
         if(InputManager::isKeyPressed(Keys::D)){
-            testImagePos += {2.0f, 0.0f};
+            imageVel += {2.0f, 0.0f};
         }
         if(InputManager::isKeyPressed(Keys::W)){
-            testImagePos += {0.0f, -2.0f};
+            imageVel += {0.0f, -4.0f};
         }
         if(InputManager::isKeyPressed(Keys::A)){
-            testImagePos += {-2.0f, 0.0f};
+            imageVel += {-2.0f, 0.0f};
         }
         if(InputManager::isKeyPressed(Keys::S)){
-            testImagePos += {0.0f, 2.0f};
+            imageVel += {0.0f, 4.0f};
         }
+        testImagePos += imageVel;
 
         mouse = InputManager::getMousePosWorld(testView);
         //'G' key will play a sound roughly where the test image is
         if(InputManager::wasKeyPressed(Keys::G)){           
             testSoundSource2.play();
         }
+
         testImage.setPosition(testImagePos);
+        testImageHitbox.setPosition(testImagePos);
         testPointerImage.setPosition(mouse + pointerDelta);
         testSoundSource2.setPosition(testImagePos);
+
+        CollisionManager::pollAllCollisions();
+        Collidable* other = CollisionManager::getNextCollision(&testImageHitbox);
+
+        if(other && other->getType() == CollidableType::testSprite){
+            
+            vec2f correction = CollisionManager::getCorrectionVel(testImageHitbox.getHitbox(), other->getHitbox(), imageVel);
+            testImagePos += correction;
+            testImage.setPosition(testImagePos);
+            testImageHitbox.setPosition(testImagePos);
+        }
+
+        
 
         GraphicManager::render();
         
