@@ -19,9 +19,8 @@ Image::Image(TextureLocation texture, const vec2f& offset, const vec2f& totalSiz
     setSize(totalSize);
 
     setTexture(texture);
-
 }
 
 Image::~Image(){
-
+    //printf("        destroying image\n");
 }

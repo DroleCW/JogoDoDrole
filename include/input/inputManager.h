@@ -2,6 +2,8 @@
 
 #include "graphics/graphicManager.h"
 
+class Clickable;
+
 //keyboard enum, maps from glfw
 enum Keys{
     Unknown = GLFW_KEY_UNKNOWN,
@@ -128,12 +130,34 @@ enum Keys{
     NumberOfKeys
 };
 
+enum MouseButtons{
+    MouseButton_1 = 1 << GLFW_MOUSE_BUTTON_1,
+    MouseButton_2 = 1 << GLFW_MOUSE_BUTTON_2,
+    MouseButton_3 = 1 << GLFW_MOUSE_BUTTON_3,
+    MouseButton_4 = 1 << GLFW_MOUSE_BUTTON_4,
+    MouseButton_5 = 1 << GLFW_MOUSE_BUTTON_5,
+    MouseButton_6 = 1 << GLFW_MOUSE_BUTTON_6,
+    MouseButton_7 = 1 << GLFW_MOUSE_BUTTON_7,
+    MouseButton_8 = 1 << GLFW_MOUSE_BUTTON_8
+};
+
+#define NUMBER_OF_MOUSE_BUTTONS 8
+
 class InputManager{
     private:
         static bool pressedKeys[Keys::NumberOfKeys];
         static bool heldKeys[Keys::NumberOfKeys];
         static bool releasedKeys[Keys::NumberOfKeys];
+
+        static bool pressedMouseButtons[NUMBER_OF_MOUSE_BUTTONS];
+        static bool heldMouseButtons[NUMBER_OF_MOUSE_BUTTONS];
+        static bool releasedMouseButtons[NUMBER_OF_MOUSE_BUTTONS];
+
         static vec2f mousePos;
+
+        static View clickablesView;
+
+        static std::vector<Clickable*> clickables;
 
         InputManager();
         ~InputManager();
@@ -143,10 +167,17 @@ class InputManager{
         static bool wasKeyReleased(Keys key);
         static bool isKeyPressed(Keys key);
 
+        static void addClickable(Clickable* clickable);
+        static void removeClickable(Clickable* clickable);
+        inline static void setClickablesView(const View& view){
+            clickablesView = view;
+        }
+
         static vec2f getMousePosScreen();//mouse position on screen (NDC)
         static vec2f getMousePosWorld(const View& view);//undoes the view transform and returns the position the cursor would have in the world
 
         static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+        static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
         static void pollEvents();
 };
 

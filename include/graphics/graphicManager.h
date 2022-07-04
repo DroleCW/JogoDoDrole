@@ -1,10 +1,12 @@
 #pragma once
 #include "graphics/renderer.h"
-#include "graphics/quad.h"
+#include "graphics/sprite.h"
 #include "graphics/text/text.h"
 #include "graphics/window.h"
 #include "graphics/particles/particleSystem.h"
 #include <set>
+
+
 
 class GraphicManager{
     private:

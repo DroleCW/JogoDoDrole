@@ -33,10 +33,13 @@ class ParticleSystem{
         void setTexture(TextureLocation texture);
         void setTexturePosition(vec2f texturePosition);
         void setTextureSize(vec2f textureSize);
-        void setParticleSize(vec2f size);
+        void setColor(vec4f color);
         void setLayer(int layer);
 
-        inline void setPosition(vec2f position){
+        inline void setPosition(vec2f& position){
+            this->position = position;
+        }
+        inline void setPosition(vec2f&& position){
             this->position = position;
         }
 

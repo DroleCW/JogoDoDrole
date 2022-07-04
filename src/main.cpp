@@ -6,7 +6,7 @@
 #include "math/vec2f.h"
 #include "graphics/sprite.h"
 #include "graphics/image.h"
-#include "managers/inputManager.h"
+#include "input/inputManager.h"
 #include "graphics/text/fontManager.h"
 #include "graphics/text/text.h"
 #include "sound/soundManager.h"
@@ -58,8 +58,6 @@ int main(){
     testSprite.setColor({1.0f, 1.0f, 1.0f, 1.0f});
     testSprite.generateQuads({0.0f, 0.0f}, {201.0f, 251.0f}, 4, 3);
     testSprite.setLayer(5);
-    Collidable testSpriteHitbox(CollidableType::testSprite, {100.0f, 100.0f, 67.0f, 62.0f});
-    CollisionManager::addCollidable(&testSpriteHitbox);
 
     //making a still image from a loaded texture
     Image testImage(TEST_TEXTURE3_LOCATION, {80.0f, 80.0f}, {180.0f, 220.0f});
@@ -68,8 +66,6 @@ int main(){
     testImage.setSize({100.0f, 100.0f});
     testImage.setColor({0.0f, 1.0f, 1.0f, 1.0f});
     testImage.setLayer(30);
-    Collidable testImageHitbox(CollidableType::testImage, {300.0f, 300.0f, 100.0f, 100.0f});
-    CollisionManager::addCollidable(&testImageHitbox);
 
     //making an image that will follow the cursor
     Image testPointerImage(TEST_TEXTURE5_LOCATION, {0.0f, 0.0f}, {443.0f, 312.0f});
@@ -86,7 +82,6 @@ int main(){
     testParticleSystem.setPosition({300.0f, 300.0f});
     testParticleSystem.setPositionRange({0.0f, 0.0f}, {0.0f, 0.0f});
     testParticleSystem.setVelocityRange({-100.0f, -100.0f}, {100.0f, 100.0f});
-    testParticleSystem.setParticleSize({50.0f, 50.0f});
     testParticleSystem.setLifetimeRange(3, 4);
     testParticleSystem.setSizeRange({100.0f, 100.0f,}, {200.0f, 200.0f}, true);
     testParticleSystem.setScalingFactor(0.998f);
@@ -146,20 +141,9 @@ int main(){
         }
 
         testImage.setPosition(testImagePos);
-        testImageHitbox.setPosition(testImagePos);
         testPointerImage.setPosition(mouse + pointerDelta);
         testSoundSource2.setPosition(testImagePos);
 
-        CollisionManager::pollAllCollisions();
-        Collidable* other = CollisionManager::getNextCollision(&testImageHitbox);
-
-        if(other && other->getType() == CollidableType::testSprite){
-            
-            vec2f correction = CollisionManager::getCorrectionVel(testImageHitbox.getHitbox(), other->getHitbox(), imageVel);
-            testImagePos += correction;
-            testImage.setPosition(testImagePos);
-            testImageHitbox.setPosition(testImagePos);
-        }
 
         
 

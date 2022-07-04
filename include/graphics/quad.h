@@ -2,6 +2,7 @@
 #include "math/vec2f.h"
 #include "math/vec4f.h"
 #include "graphics/textureLocations.h"
+#include <stdio.h>
 
 struct Vertex{
     vec2f position;
@@ -14,6 +15,7 @@ class Quad{
     private:
         TextureLocation texture;
         Vertex vertices[4];
+        bool visible;
 
     public:
         Quad(bool autoIndex = true);
@@ -22,6 +24,8 @@ class Quad{
         void setPosition(const vec2f& pos);
         void move(const vec2f& delta);
         void setSize(const vec2f& size);
+        vec2f getSize() const;
+
         void scale(float scalar);
         void setWidth(float width);
         void setHeight(float height);
@@ -43,6 +47,9 @@ class Quad{
 
         inline void setTexture(TextureLocation texture){this->texture = texture;}
         inline TextureLocation getTexture() const{return texture;}
+
+        inline void setVisible(bool visible){this->visible = visible;}
+        inline bool getVisible() const{return visible;}
 
         const float* getDataf() const;
 

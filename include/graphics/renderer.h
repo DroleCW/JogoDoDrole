@@ -10,7 +10,7 @@
 #include <map>
 
 #define MAX_QUADS_PER_DRAW      1000
-#define RENDERER_BUFFER_SIZE    MAX_QUADS_PER_DRAW*sizeof(Quad)
+#define RENDERER_BUFFER_SIZE    MAX_QUADS_PER_DRAW*4*(sizeof(Vertex)+sizeof(float))
 
 #define MAX_TEXTURE_SLOTS       16
 

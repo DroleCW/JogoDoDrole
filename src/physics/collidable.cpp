@@ -1,13 +1,14 @@
 #include "physics/collidable.h"
+#include "physics/collisionManager.h"
 
-Collidable::Collidable(CollidableType type, const rectangle& hitbox){
-    childCount = 0;
-    childreen = nullptr;
+Collidable::Collidable(void* parent, CollidableType type, const rectangle& hitbox){
+    this->parent = parent;
     setType(type);
     setHitbox(hitbox);
     activate();
+    CollisionManager::addCollidable(this);
 }
 
 Collidable::~Collidable(){
-
+    CollisionManager::removeCollidable(this);
 }

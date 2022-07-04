@@ -58,6 +58,7 @@ void SoundSource::setLooping(bool looping){
     alSourcei(soundSourceName, AL_LOOPING, looping);
 }
 
+//distance at which set gain is measured
 void SoundSource::setReferenceDistance(float distance){
     alSourcef(soundSourceName, AL_REFERENCE_DISTANCE, distance);
 }

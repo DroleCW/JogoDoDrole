@@ -1,5 +1,5 @@
 #include "graphics/window.h"
-#include "managers/inputManager.h"
+#include "input/inputManager.h"
 #include <iostream>
 
 GLFWwindow* Window::windowHandle = nullptr;
@@ -28,7 +28,7 @@ void Window::createWindow(unsigned int screenWidth, unsigned int screenHeight, c
     #endif
 
     windowHandle = nullptr;
-    windowHandle = glfwCreateWindow(windowWidth, windowHeight, name, NULL, NULL);
+    windowHandle = glfwCreateWindow(windowWidth, windowHeight, name, nullptr, nullptr);
     if (windowHandle == nullptr){
         std::cout << "Failed to create GLFW window" << std::endl;
         return;
@@ -37,6 +37,7 @@ void Window::createWindow(unsigned int screenWidth, unsigned int screenHeight, c
     glfwSwapInterval(1);
     glfwSetFramebufferSizeCallback(windowHandle, framebuffer_size_callback);
     glfwSetKeyCallback(windowHandle, InputManager::key_callback);
+    glfwSetMouseButtonCallback(windowHandle, InputManager::mouse_button_callback);
 
     initOpenGL();
 }

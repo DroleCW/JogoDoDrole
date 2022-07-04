@@ -1,8 +1,8 @@
 #include "graphics/quad.h"
-#include <stdio.h>
 #include "graphics/graphicManager.h"
 
 Quad::Quad(bool autoIndex){
+    visible = true;
     for(int i = 0; i < 4; i++){
         vertices[i] = { 
                         {0.0f, 0.0f},//position
@@ -28,6 +28,16 @@ void Quad::setPosition(const vec2f& pos){
     vertices[1].position = {pos.x + size.x, pos.y};
     vertices[2].position = {pos.x + size.x, pos.y + size.y};
     vertices[3].position = {pos.x, pos.y + size.y};
+
+    /* printf("quad pos:"
+            "   %f, %f\n"
+            "   %f, %f\n"
+            "   %f, %f\n"
+            "   %f, %f\n",
+            vertices[0].position.x, vertices[0].position.y,
+            vertices[1].position.x, vertices[1].position.y,
+            vertices[2].position.x, vertices[2].position.y,
+            vertices[3].position.x, vertices[3].position.y); */
 }
 
 void Quad::move(const vec2f& delta){
@@ -41,6 +51,10 @@ void Quad::setSize(const vec2f& size){
     vertices[1].position = {vertices[0].position.x + size.x, vertices[0].position.y};
     vertices[2].position = {vertices[0].position.x + size.x, vertices[0].position.y + size.y};
     vertices[3].position = {vertices[0].position.x, vertices[0].position.y + size.y};
+}
+
+vec2f Quad::getSize() const{
+    return vertices[2].position - vertices[0].position;
 }
 
 void Quad::scale(float scalar){

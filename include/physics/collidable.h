@@ -4,30 +4,31 @@
 #include "math/vec2f.h"
 #include "physics/collidableTypes.h"
 
+//#define GET_COLLIDABLE_PARENT(type) (( type *)this->getParent())
+#define GET_COLLIDABLE_PARENT(collidable, type) (( type *)collidable->getParent())
+
+#define CREATE_COLLLIDABLE_TYPE(typename)   class typename : public Collidable{\
+                                                public:\
+                                                    typename (void* parent, CollidableType type, const rectangle& hitbox = {0.0f, 0.0f, 0.0f, 0.0f}):\
+                                                    Collidable(parent, type, hitbox){}\
+                                                    virtual void onCollide(Collidable* other) override;\
+                                            }
+
+//if the signs are equal (0.0 counts as both)
+#define CHECK_SIGN(a, b) ( a * b >= 0.0f)
+
 class Collidable{
     private:
+        void* parent;
         rectangle hitbox;
         bool active;
         CollidableType type;
-        int childCount;
-        Collidable* childreen;
 
     public:
-        Collidable(CollidableType type = defaultType, const rectangle& hitbox = {0.0f, 0.0f, 0.0f, 0.0f});
-        ~Collidable();
+        Collidable(void* parent = nullptr, CollidableType type = CollidableType::defaultType, const rectangle& hitbox = {0.0f, 0.0f, 0.0f, 0.0f});
+        virtual ~Collidable();
 
-        inline void setChildreen(Collidable* childreenArray, int size){
-            childreen = childreenArray;
-            childCount = size;
-        }
-
-        inline Collidable* getChildreen() const{
-            return childreen;
-        }
-
-        inline int getChildreenCount() const{
-            return childCount;
-        }
+        virtual void onCollide(Collidable* other){}
 
         inline void activate(){active = true;}
         inline void deactivate(){active = false;}
@@ -59,5 +60,11 @@ class Collidable{
             hitbox.h = size.y;
         }
 
+        inline void setParent(void* parent){
+            this->parent = parent;
+        }
 
+        inline void* getParent() const{
+            return parent;
+        }
 };

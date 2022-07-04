@@ -11,8 +11,10 @@ Particle::~Particle(){
 
 bool Particle::update(float dt){
     move(velocity*dt);
+    scale(scalingFactor);
+
     lifetime -= dt;
     isAlive = lifetime > 0;
-    scale(scalingFactor);
+    
     return isAlive;    
 }

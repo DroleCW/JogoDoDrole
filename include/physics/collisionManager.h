@@ -19,8 +19,8 @@ class CollisionManager{
         static void addCollidable(Collidable*);
         static void removeCollidable(Collidable*);
 
-        //checks and logs whether a collision happened between collidables a and b, recursively calls checks for all childreen collidables.
-        //all found collisions, for both parent and child collidables, are logged in the collisions map. 
+        //checks and logs whether a collision happened between collidables a and b
+        //all found collisions are logged in the collisions map. 
         static void checkCollision(Collidable* a, Collidable* b);
 
         //checks whether a rectangle intersects another

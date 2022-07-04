@@ -20,7 +20,7 @@ Renderer::Renderer(const View& view):rendererShader(), rendererView(view){
     //vertex buffer setup
     glGenBuffers(1, &rendererVertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, rendererVertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, RENDERER_BUFFER_SIZE, NULL, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, RENDERER_BUFFER_SIZE, nullptr, GL_DYNAMIC_DRAW);
 
 
     //index buffer setup
@@ -37,7 +37,7 @@ Renderer::Renderer(const View& view):rendererShader(), rendererView(view){
 
     glGenBuffers(1, &rendererIndexBuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, rendererIndexBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, MAX_QUADS_PER_DRAW, indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6*MAX_QUADS_PER_DRAW*sizeof(unsigned int), indices, GL_DYNAMIC_DRAW);
 
     //vertex attributes setup
     //position
@@ -67,7 +67,6 @@ void Renderer::clear(){
 
 void Renderer::render(){
     unsigned int textureIndex;
-
     for(auto quadIt = quadBuffer.begin(); quadIt != quadBuffer.end(); quadIt++){
         if(!renderQuad(quadIt->second)){
             renderBuffer();
@@ -95,10 +94,16 @@ bool Renderer::renderQuad(Quad* quad){
         renderData[29] = (float)textureIndex;
         memcpy(renderData+30, quad->getDataf()+27, sizeof(Vertex));
         renderData[39] = (float)textureIndex;
-
+        /* printf("sub buff: %f %f %f %f %f %f %f %f %f %f\n"
+        "           %f %f %f %f %f %f %f %f %f %f\n"
+        "           %f %f %f %f %f %f %f %f %f %f\n"
+        "           %f %f %f %f %f %f %f %f %f %f\n\n", renderData[0], renderData[1], renderData[2], renderData[3], renderData[4], renderData[5], renderData[6], renderData[7], renderData[8], renderData[9],
+                                                  renderData[10], renderData[11], renderData[12], renderData[13], renderData[14], renderData[15], renderData[16], renderData[17], renderData[18], renderData[19],
+                                                  renderData[20], renderData[21], renderData[22], renderData[23], renderData[24], renderData[25], renderData[26], renderData[27], renderData[28], renderData[29],
+                                                  renderData[30], renderData[31], renderData[32], renderData[33], renderData[34], renderData[35], renderData[36], renderData[37], renderData[38], renderData[39]); */ 
         glBindBuffer(GL_ARRAY_BUFFER, rendererVertexBuffer);
         glBufferSubData(GL_ARRAY_BUFFER, loadedQuads*4*(sizeof(Vertex)+sizeof(float)), 4*(sizeof(Vertex)+sizeof(float)), renderData);
-    
+
         if(textureIndex == boundTexturesCount){
             boundTexturesCount++;
             boundTextures[textureIndex] = quad->getTexture();
@@ -111,7 +116,8 @@ bool Renderer::renderQuad(Quad* quad){
 }
 
 void Renderer::queueQuad(Quad* quad){
-    quadBuffer.insert({quad->getLayer(), quad});
+    if(quad->getVisible())
+        quadBuffer.insert({quad->getLayer(), quad});
 }
 
 void Renderer::queueText(Text* text){
@@ -128,6 +134,7 @@ void Renderer::queueParticles(ParticleSystem* particleSystem){
 }
 
 void Renderer::renderBuffer(){
+
     rendererShader.bind();
     glBindVertexArray(rendererVertexArray);
     //view transform uniforms
@@ -139,15 +146,14 @@ void Renderer::renderBuffer(){
         textureSlots[i] = i;
     rendererShader.setUniform("textureSampler", textureSlots, boundTexturesCount);
 
-    for(unsigned int i = 0; i < boundTexturesCount; i++)
+    for(unsigned int i = 0; i < boundTexturesCount; i++){
         TextureManager::bindTexture(boundTextures[i], i);
-    
-    glDrawElements(GL_TRIANGLES, 6*loadedQuads, GL_UNSIGNED_INT, 0);
-
-    if(boundTexturesCount == MAX_TEXTURE_SLOTS || TextureManager::getLoadedTextures() > MAX_TEXTURE_SLOTS){
-        boundTexturesCount = 0;
     }
+    glDrawElements(GL_TRIANGLES, 6*loadedQuads, GL_UNSIGNED_INT, 0);
+    
+    //if(boundTexturesCount == MAX_TEXTURE_SLOTS || TextureManager::getLoadedTextures() > MAX_TEXTURE_SLOTS){
+        boundTexturesCount = 0;
+    //}//oh no
 
     loadedQuads = 0;
-    
 }

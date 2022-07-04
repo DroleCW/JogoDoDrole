@@ -25,11 +25,12 @@ ParticleSystem::~ParticleSystem(){
 }
 
 void ParticleSystem::update(float dt){
-    for(int j = 0, count = 0; j < MAX_LIVING_PARTICLES && count < livingParticles; j++){
+    //printf("part are %d\n", livingParticles);
+    for(int j = 0, toUpdate = livingParticles; j < MAX_LIVING_PARTICLES && toUpdate > 0; j++){
         if(particles[j].getIsAlive()){
             if(!particles[j].update(dt))
                 livingParticles--;
-            count++;
+            toUpdate--;
         }
     }
 }
@@ -52,9 +53,9 @@ void ParticleSystem::setTextureSize(vec2f textureSize){
     
 }
 
-void ParticleSystem::setParticleSize(vec2f size){
+void ParticleSystem::setColor(vec4f color){
     for(int j = 0; j < MAX_LIVING_PARTICLES; j++){
-        particles[j].setSize(size);
+        particles[j].setColor(color);
     }
 }
 
@@ -64,6 +65,7 @@ void ParticleSystem::setLayer(int layer){
     }
 }
 
+//the scaling factor is applied every update
 void ParticleSystem::setScalingFactor(float scalingFactor){
     for(int j = 0; j < MAX_LIVING_PARTICLES; j++){
         particles[j].setScalingFactor(scalingFactor);
@@ -73,12 +75,13 @@ void ParticleSystem::setScalingFactor(float scalingFactor){
 void ParticleSystem::emit(){
     if(livingParticles == MAX_LIVING_PARTICLES)
         return;
-
-    while(particles[insertionIt++].getIsAlive()){//find a dead particle slot
+    //printf("inserting ");
+    while(particles[insertionIt].getIsAlive()){//find a dead particle slot
+        insertionIt++;
         if(insertionIt >= MAX_LIVING_PARTICLES)
             insertionIt = 0;
     }
-
+    //printf("found(%d) ", insertionIt);
     vec2f newPosition(RAND_0TO1_F*(highPositionLimit.x-lowPositionLimit.x) + lowPositionLimit.x, RAND_0TO1_F*(highPositionLimit.y-lowPositionLimit.y) + lowPositionLimit.y);
     newPosition += position;
     particles[insertionIt].setPosition(newPosition);
@@ -92,12 +95,14 @@ void ParticleSystem::emit(){
 }
 
 void ParticleSystem::emit(int repeat){
-    if(livingParticles == MAX_LIVING_PARTICLES)
-        return;
+    
     while(repeat){
+        if(livingParticles == MAX_LIVING_PARTICLES)
+            return;
         emit();
         repeat--;
     }
+    //printf("\ni it: %d %d\n", insertionIt, livingParticles);
 }
 
 Particle* ParticleSystem::getNextLivingParticle(){

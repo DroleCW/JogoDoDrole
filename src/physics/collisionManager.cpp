@@ -21,17 +21,24 @@ void CollisionManager::addCollidable(Collidable* collidable){
 
 void CollisionManager::removeCollidable(Collidable* collidable){
     for(auto i = collidables.begin(); i != collidables.end(); i++)
-        if(*i == collidable)
+        if(*i == collidable){
             collidables.erase(i);
+            break;
+        }
 }
 
 void CollisionManager::checkCollision(Collidable* a, Collidable* b){
+
+    if(!a->isActive() || !b->isActive()) return; //one of the collidables is inactive
+
     if(checkIntersection(a->getHitbox(), b->getHitbox())){
-        collisions.emplace(a, b);
-        collisions.emplace(b, a);
-        for(int i = 0; i < a->getChildreenCount(); i++)
-            for(int j = 0; j < b->getChildreenCount(); j++)
-                checkCollision(a->getChildreen()+i, b->getChildreen()+j);
+
+        //collisions.emplace(a, b);//log collisions
+        //collisions.emplace(b, a);
+
+        a->onCollide(b);//call events if any
+        b->onCollide(a);
+
     }
 }
 
@@ -68,17 +75,22 @@ vec2f CollisionManager::getCorrectionVel(const rectangle& a, const rectangle& b,
     
     bool xPlausible = fabs(vel.x) - fabs(offset.x) >= 0;//a collision in x is plausible if the offset is smaller than the velocity in this axis
     bool yPlausible = fabs(vel.y) - fabs(offset.y) >= 0;//same for y
+    //printf("    x is %f %f\n", fabs(vel.x) - fabs(offset.x), fabs(offset.x));
+    //printf("    y is %f %f\n", fabs(vel.y) - fabs(offset.y), fabs(offset.y));
 
     if(xPlausible && !yPlausible)
         correction.x = -offset.x;
     else if(!xPlausible && yPlausible)
         correction.y = -offset.y;
     else{//if both (or none for some weird reason) are plausible, correct in the direction of the smallest offset
-        if(offset.x <= offset.y)
+        /* if(fabs(offset.x) <= fabs(offset.y))
             correction.x = -offset.x;
         else
-            correction.y = -offset.y;
+            correction.y = -offset.y; */
+        correction.x = -offset.x;
+        correction.y = -offset.y;
     }
+    //printf("    correction got: %f, %f\n", correction.x, correction.y);
     return correction;
 }
 
@@ -104,7 +116,8 @@ Collidable* CollisionManager::getNextCollision(Collidable* target){
 void CollisionManager::pollAllCollisions(){
     collisions.clear();
     for(int i = 0; i < collidables.size(); i++)
-        for(int j = i+1; j < collidables.size(); j++)
+        for(int j = i+1; j < collidables.size(); j++){
             checkCollision(collidables[i], collidables[j]);
+        }
     indexedCollidable = nullptr;
 }
