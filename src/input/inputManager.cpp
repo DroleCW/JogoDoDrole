@@ -1,6 +1,6 @@
 
 #include "input/inputManager.h"
-#include "input/clickable.h"
+#include "input/clickBox.h"
 
 bool InputManager::pressedKeys[Keys::NumberOfKeys];
 bool InputManager::releasedKeys[Keys::NumberOfKeys];
@@ -11,8 +11,8 @@ bool InputManager::pressedMouseButtons[NUMBER_OF_MOUSE_BUTTONS];
 bool InputManager::heldMouseButtons[NUMBER_OF_MOUSE_BUTTONS];
 bool InputManager::releasedMouseButtons[NUMBER_OF_MOUSE_BUTTONS];
 
-std::vector<Clickable*> InputManager::clickables;
-View InputManager::clickablesView;
+std::vector<ClickBox*> InputManager::clickBoxs;
+View InputManager::clickBoxsView;
 
 InputManager::InputManager(){
 
@@ -34,14 +34,14 @@ bool InputManager::isKeyPressed(Keys key){
     return heldKeys[key];
 }
 
-void InputManager::addClickable(Clickable* clickable){
-    clickables.push_back(clickable);
+void InputManager::addClickBox(ClickBox* clickBox){
+    clickBoxs.push_back(clickBox);
 }
 
-void InputManager::removeClickable(Clickable* clickable){
-    for(auto i = clickables.begin(); i != clickables.end(); i++)
-            if(*i == clickable){
-                clickables.erase(i);
+void InputManager::removeClickBox(ClickBox* clickBox){
+    for(auto i = clickBoxs.begin(); i != clickBoxs.end(); i++)
+            if(*i == clickBox){
+                clickBoxs.erase(i);
                 break;
             }
 }
@@ -75,13 +75,13 @@ void InputManager::pollEvents(){
     glfwGetCursorPos(Window::getWindowHandle(), &mouseX, &mouseY);
     mousePos = {2*mouseX/Window::getWindowWidth()-1, -2*mouseY/Window::getWindowHeight()+1};
 
-    for(auto i = clickables.begin(); i != clickables.end(); i++){
+    for(auto i = clickBoxs.begin(); i != clickBoxs.end(); i++){
         if(!(*i)->getEnabled())
             continue;
             
         vec2f pos = (*i)->getPosition();
         vec2f size = (*i)->getSize();
-        vec2f worldMousePos = getMousePosWorld(clickablesView);
+        vec2f worldMousePos = getMousePosWorld(clickBoxsView);
         if(worldMousePos.x > pos.x && worldMousePos.x < pos.x+size.x && worldMousePos.y < pos.y && worldMousePos.y > pos.y-size.y){
             (*i)->setHovering(true);
             for(int j = 0; j < NUMBER_OF_MOUSE_BUTTONS; j++)

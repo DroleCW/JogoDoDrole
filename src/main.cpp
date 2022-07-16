@@ -56,7 +56,7 @@ int main(){
     testSprite.setPosition({100.0f, 100.0f});
     testSprite.setSize({67.0f, 62.0f});
     testSprite.setColor({1.0f, 1.0f, 1.0f, 1.0f});
-    testSprite.generateQuads({0.0f, 0.0f}, {201.0f, 251.0f}, 4, 3);
+    testSprite.generateFrames({0.0f, 0.0f}, {201.0f, 251.0f}, 4, 3);
     testSprite.setLayer(5);
 
     //making a still image from a loaded texture
@@ -114,7 +114,7 @@ int main(){
         i++;
         if(i > 60){
             i = 0;
-            testSprite.nextQuad();
+            testSprite.nextFrame();
             testParticleSystem.emit();
         }
         imageVel = {0.0f, 0.0f};

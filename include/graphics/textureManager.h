@@ -9,11 +9,12 @@
 #include <vector>
 #include <unordered_map>
 
+/*Handles the loading and unloading of textures*/
 class TextureManager{
     private:
-        static Texture* loadedTextures[NUMBER_OF_TEXTURES];
-        static std::unordered_map<int, Texture*> atlas;
-        static char* texturePaths[NUMBER_OF_TEXTURES];
+        static Texture* loadedTextures[NUMBER_OF_TEXTURES]; //vector of all possible loaded textures
+        static std::unordered_map<int, Texture*> atlas; //font atlas map for loaded fonts
+        static char* texturePaths[NUMBER_OF_TEXTURES]; //paths of texture files
         static int totalLoadedTextures;
 
         TextureManager();
@@ -33,6 +34,8 @@ class TextureManager{
         static void bindTexture(TextureLocation textureIndex, int slot);
         static Texture* getTexture(TextureLocation textureIndex);
 
+        /*fills the texturePaths vector using the contents of a file. The texture to TextureLocation index
+        happens here*/
         static bool loadTexturePaths(const char* indicesFilePath);
 
         static inline int getLoadedTextures(){

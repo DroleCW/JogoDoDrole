@@ -1,7 +1,7 @@
 #pragma once
 #include "graphics/quad.h"
 
-
+//a static image. meant to save data when objects don't need to be animated.
 class Image: public Quad{
     
     private:

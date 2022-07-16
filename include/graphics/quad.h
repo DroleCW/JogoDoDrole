@@ -11,6 +11,9 @@ struct Vertex{
     vec2f textureCoord;
 };
 
+/*A set of vertices forming a rectangle to be rendered on screen. This rectangle is filled with a texture.
+Every quad, if not otherwise specified, will be referenced by the graphicManager upon construction and rendered
+every frame while visible.*/
 class Quad{
     private:
         TextureLocation texture;
@@ -18,6 +21,8 @@ class Quad{
         bool visible;
 
     public:
+        /*A quad is by default referenced by the graphicManager to be rendered individualy, this behavior is
+        unwanted in certain cases.*/
         Quad(bool autoIndex = true);
         ~Quad();
 
@@ -51,6 +56,7 @@ class Quad{
         inline void setVisible(bool visible){this->visible = visible;}
         inline bool getVisible() const{return visible;}
 
+        //get the raw vertex data for rendering
         const float* getDataf() const;
 
 };

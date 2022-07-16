@@ -3,7 +3,9 @@
 #include "math/vec2f.h"
 #include "input/inputManager.h"
 
-class Clickable{
+/*An object of this class is attached to anything that can be clicked. It is referenced to the inputManager
+upon construction and will be updated when an event happens.*/
+class ClickBox{
     protected:
         vec2f pos;
         vec2f size;
@@ -14,8 +16,8 @@ class Clickable{
         bool enabled;
 
     public:
-        Clickable(const vec2f& pos = {0.0f, 0.0f}, const vec2f& size = {0.0f, 0.0f});
-        ~Clickable();
+        ClickBox(const vec2f& pos = {0.0f, 0.0f}, const vec2f& size = {0.0f, 0.0f});
+        ~ClickBox();
 
         inline bool isHovering() const{
             return hovering;
@@ -24,7 +26,7 @@ class Clickable{
             return clicked & button;
         }
 
-        void setClickBox(const vec2f& pos, const vec2f& size);
+        void setBox(const vec2f& pos, const vec2f& size);
 
         inline void setClicked(int clicked){
             this->clicked |= clicked;
@@ -67,7 +69,5 @@ class Clickable{
             return enabled;
         }
         
-
-        friend class EventsManager;
 
 };

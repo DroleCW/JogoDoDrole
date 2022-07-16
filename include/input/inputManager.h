@@ -2,7 +2,7 @@
 
 #include "graphics/graphicManager.h"
 
-class Clickable;
+class ClickBox;
 
 //keyboard enum, maps from glfw
 enum Keys{
@@ -155,9 +155,9 @@ class InputManager{
 
         static vec2f mousePos;
 
-        static View clickablesView;
+        static View clickBoxsView;
 
-        static std::vector<Clickable*> clickables;
+        static std::vector<ClickBox*> clickBoxs;
 
         InputManager();
         ~InputManager();
@@ -167,10 +167,10 @@ class InputManager{
         static bool wasKeyReleased(Keys key);
         static bool isKeyPressed(Keys key);
 
-        static void addClickable(Clickable* clickable);
-        static void removeClickable(Clickable* clickable);
-        inline static void setClickablesView(const View& view){
-            clickablesView = view;
+        static void addClickBox(ClickBox* clickBox);
+        static void removeClickBox(ClickBox* clickBox);
+        inline static void setClickBoxsView(const View& view){
+            clickBoxsView = view;
         }
 
         static vec2f getMousePosScreen();//mouse position on screen (NDC)

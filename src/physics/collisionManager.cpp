@@ -1,9 +1,9 @@
 #include "physics/collisionManager.h"
 
-std::vector<Collidable*> CollisionManager::collidables;
-std::unordered_multimap<Collidable*, Collidable*> CollisionManager::collisions;
-Collidable* CollisionManager::indexedCollidable;
-std::unordered_multimap<Collidable*, Collidable*>::local_iterator CollisionManager::indexedCollision;
+std::vector<Collider*> CollisionManager::colliders;
+std::unordered_multimap<Collider*, Collider*> CollisionManager::collisions;
+Collider* CollisionManager::indexedCollider;
+std::unordered_multimap<Collider*, Collider*>::local_iterator CollisionManager::indexedCollision;
 
 
 CollisionManager::CollisionManager(){ 
@@ -14,22 +14,22 @@ CollisionManager::~CollisionManager(){
 
 }
 
-void CollisionManager::addCollidable(Collidable* collidable){
-    collidables.push_back(collidable);
+void CollisionManager::addCollider(Collider* collider){
+    colliders.push_back(collider);
     collisions.clear();
 }
 
-void CollisionManager::removeCollidable(Collidable* collidable){
-    for(auto i = collidables.begin(); i != collidables.end(); i++)
-        if(*i == collidable){
-            collidables.erase(i);
+void CollisionManager::removeCollider(Collider* collider){
+    for(auto i = colliders.begin(); i != colliders.end(); i++)
+        if(*i == collider){
+            colliders.erase(i);
             break;
         }
 }
 
-void CollisionManager::checkCollision(Collidable* a, Collidable* b){
+void CollisionManager::checkCollision(Collider* a, Collider* b){
 
-    if(!a->isActive() || !b->isActive()) return; //one of the collidables is inactive
+    if(!a->isActive() || !b->isActive()) return; //one of the colliders is inactive
 
     if(checkIntersection(a->getHitbox(), b->getHitbox())){
 
@@ -94,12 +94,12 @@ vec2f CollisionManager::getCorrectionVel(const rectangle& a, const rectangle& b,
     return correction;
 }
 
-Collidable* CollisionManager::getNextCollision(Collidable* target){
+Collider* CollisionManager::getNextCollision(Collider* target){
 
     if(collisions.bucket_count() <= 1)
         return nullptr;
-    if(target != indexedCollidable){
-        indexedCollidable = target;
+    if(target != indexedCollider){
+        indexedCollider = target;
         indexedCollision = collisions.begin(collisions.bucket(target));
     }
     else if(indexedCollision == collisions.end(collisions.bucket(target)))
@@ -115,9 +115,9 @@ Collidable* CollisionManager::getNextCollision(Collidable* target){
 
 void CollisionManager::pollAllCollisions(){
     collisions.clear();
-    for(int i = 0; i < collidables.size(); i++)
-        for(int j = i+1; j < collidables.size(); j++){
-            checkCollision(collidables[i], collidables[j]);
+    for(int i = 0; i < colliders.size(); i++)
+        for(int j = i+1; j < colliders.size(); j++){
+            checkCollision(colliders[i], colliders[j]);
         }
-    indexedCollidable = nullptr;
+    indexedCollider = nullptr;
 }

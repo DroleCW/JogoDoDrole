@@ -1,6 +1,7 @@
 #pragma once
 #include "sound/sndfile.h"
 
+//A sound effect or music
 class Sound{
 
     private:

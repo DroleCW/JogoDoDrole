@@ -7,7 +7,7 @@
 #include <set>
 
 
-
+//indexes all renderable objects and renders them with a given view.
 class GraphicManager{
     private:
         static Renderer* pQuadRenderer;
@@ -19,9 +19,11 @@ class GraphicManager{
         ~GraphicManager();
 
     public:
+        //The graphics manager can only be initialized with an open window
         static void init();
         static void terminate();
 
+        //opens a window and initializes OpenGL, it must be called before init.
         static void openWindow(int width, int height, const char* name);
 
         inline static bool getWindowShouldClose(){
@@ -38,10 +40,13 @@ class GraphicManager{
 
         static void addQuad(Quad* quad);
         static void removeQuad(Quad* quad);
+
         static void addText(Text* text);
         static void removeText(Text* text);
+
         static void addParticleSystem(ParticleSystem* particleSystem);
         static void removeParticleSystem(ParticleSystem* particleSystem);
+
         static void clear();
         static void render();
 };
