@@ -12,14 +12,19 @@ StateStack::~StateStack(){
 }
 
 void StateStack::push(StateStack::State* state){
-    state->enter();
+    if(states.size())
+        states.top()->onInactive();
+    state->onActive();
     states.push(state);
 }
 
 void StateStack::pop(){
-    states.top()->exit();
+    states.top()->onInactive();
     delete states.top();
+    
     states.pop();
+    if(states.size())
+        states.top()->onActive();
 }
 
 void StateStack::update(){

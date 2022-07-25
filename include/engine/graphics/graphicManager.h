@@ -7,6 +7,9 @@
 #include <set>
 
 
+#define SCR_WIDTH 800
+#define SCR_HEIGHT 600
+
 //indexes all renderable objects and renders them with a given view.
 class GraphicManager{
     private:
@@ -25,6 +28,10 @@ class GraphicManager{
 
         //opens a window and initializes OpenGL, it must be called before init.
         static void openWindow(int width, int height, const char* name);
+
+        inline static float getWindowTime(){
+            return glfwGetTime();
+        }
 
         inline static bool getWindowShouldClose(){
            return Window::getShouldClose();

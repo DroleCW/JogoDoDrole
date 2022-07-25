@@ -9,7 +9,8 @@ set(CMAKE_CXX_STANDARD 17)
 file(GLOB_RECURSE SOURCES RELATIVE ${CMAKE_SOURCE_DIR} "src/*.cpp")
 
 include_directories(include)
-include_directories(include/graphics/text)
+include_directories(include/engine)
+include_directories(include/engine/graphics/text)
 
 ExternalProject_Add(glfw
 	GIT_REPOSITORY https://github.com/glfw/glfw.git 

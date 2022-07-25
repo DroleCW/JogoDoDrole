@@ -17,8 +17,8 @@ public: class State{
 
                 }
 
-                virtual void enter(){}
-                virtual void exit(){}
+                virtual void onActive(){}//called whenever it gets to the top of the stack.
+                virtual void onInactive(){}//called whenever it is not on the top of the stack anymore.
 
                 virtual void update() = 0;
 
